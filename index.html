@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vegga · verify that what a dapp shows is what its users sign</title>
+<meta name="description" content="Vegga uses Kane CLI to prove that what a dapp shows is what its users sign.">
+<style>
+  :root{--fog:#edf0f5;--paper:#fff;--ink:#101a33;--ink-2:#4a5573;--line:#d5dbe8;--cobalt:#2750f0;--rose:#c23b55;--rose-bg:#fde8ec;--teal:#0b7a6b;--teal-bg:#dcf3ee;
+    --font:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fog);color:var(--ink);font-family:var(--font);line-height:1.55}
+  main{max-width:880px;margin:0 auto;padding:clamp(24px,6vw,64px) clamp(16px,4vw,32px) 80px}
+  h1{font-size:clamp(2rem,6vw,3.2rem);letter-spacing:-.035em;margin:0 0 12px;line-height:1.08}
+  .lead{font-size:1.15rem;color:var(--ink-2);max-width:60ch;margin:0 0 28px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:28px 0}
+  a.card{display:block;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px;text-decoration:none;color:inherit}
+  a.card:hover{border-color:var(--cobalt)}
+  .tag{display:inline-block;border-radius:999px;padding:2px 12px;font-size:.8rem;font-weight:700}
+  .bad{background:var(--rose-bg);color:var(--rose)}.good{background:var(--teal-bg);color:var(--teal)}.neutral{background:#e8ebf2;color:var(--ink-2)}
+  a.card h2{margin:10px 0 6px;font-size:1.15rem}a.card p{margin:0;color:var(--ink-2);font-size:.95rem}
+  ol{padding-left:1.2rem;color:var(--ink-2)} li{margin:6px 0}
+  .note{background:var(--paper);border:1px dashed var(--line);border-radius:14px;padding:14px 18px;color:var(--ink-2);font-size:.95rem}
+</style>
+</head>
+<body>
+<main>
+  <h1>What you see is not always what you sign.</h1>
+  <p class="lead">A dapp can show “Pay 25 USDC to 0xA11c…” while the wallet is asked to sign a different recipient, a bigger amount, an unlimited approval, another chain, or hidden ETH. Vegga uses Kane CLI to drive the real UI while a test wallet records what is actually signed, then compares the two.</p>
+  <div class="grid">
+    <a class="card" href="/fixture-before/"><span class="tag bad">Before</span><h2>Shipped build</h2><p>The demo dapp as an agent first shipped it, with five planted defects in what it asks the wallet to sign.</p></a>
+    <a class="card" href="/fixture/"><span class="tag good">After</span><h2>Fixed build</h2><p>The same dapp after an agent fixed it from Kane’s evidence.</p></a>
+    <a class="card" href="/dashboard/"><span class="tag neutral">Evidence</span><h2>Verification dashboard</h2><p>Kane runs, screen-versus-signed tables and the screen at the moment of signing.</p></a>
+  </div>
+  <ol>
+    <li>Kane CLI drives the dapp from a plain-English objective and stores what the screen claims.</li>
+    <li>A test wallet records every signing request and snapshots the screen at that moment.</li>
+    <li>Vegga decodes the transaction and flags any mismatch. An agent fixes it, Kane re-verifies.</li>
+  </ol>
+  <p class="note">These pages host the demo dapp and the recorded evidence. To run a verification yourself, clone the repository: the test wallet is injected by the Vegga harness, so a normal browser will ask for your own wallet.</p>
+</main>
+</body>
+</html>
