@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vegga Swap</title><link rel="stylesheet" href="../shared.css"></head>
+<body>
+<header class="top">
+  <div class="brand">Vegga Swap<small>USDC to DAI</small></div>
+  <div class="right"><span id="network-chip" class="chip">Not connected</span>
+  <button id="connect-btn" class="primary" type="button" disabled>Connect wallet</button></div>
+</header>
+<main>
+  <div id="network-banner" class="banner" role="alert" hidden>
+    <p><strong>Wrong network.</strong> Swaps run on Sepolia Testnet.</p>
+    <button id="switch-btn" type="button">Switch to Sepolia Testnet</button>
+  </div>
+  <section class="card" aria-labelledby="h">
+    <h1 id="h">Swap</h1>
+    <div class="field"><label for="amount">Amount to swap (USDC)</label>
+      <input id="amount" inputmode="decimal" autocomplete="off" placeholder="0.00" disabled></div>
+    <dl aria-label="Swap summary">
+      <div><dt>You pay</dt><dd id="sum-pay">—</dd></div>
+      <div><dt>You receive (estimate)</dt><dd id="sum-receive">—</dd></div>
+      <div><dt>Slippage tolerance</dt><dd>1%</dd></div>
+      <div><dt>Minimum received</dt><dd id="sum-min">—</dd></div>
+      <div><dt>Recipient (your wallet)</dt><dd id="sum-recipient">—</dd></div>
+      <div><dt>Router</dt><dd id="sum-router">0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D</dd></div>
+      <div><dt>Network</dt><dd id="sum-network">Sepolia Testnet</dd></div>
+    </dl>
+    <div class="steps">
+      <button id="approve-btn" type="button" disabled><span id="approve-label">Approve</span><span class="n">Step 1 of 2</span></button>
+      <button id="swap-btn" class="primary" type="button" disabled><span id="swap-label">Swap</span><span class="n">Step 2 of 2</span></button>
+    </div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+  </section>
+  <section id="receipt" class="card receipt" hidden><h2>Swap submitted</h2><p id="rc-text"></p></section>
+</main>
+<script type="module" src="./app.js"></script>
+</body></html>

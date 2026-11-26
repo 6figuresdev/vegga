@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vegga Airdrop</title><link rel="stylesheet" href="../shared.css"></head>
+<body>
+<header class="top">
+  <div class="brand">Vegga Airdrop<small>claim VEG</small></div>
+  <div class="right"><span id="network-chip" class="chip">Not connected</span>
+  <button id="connect-btn" class="primary" type="button" disabled>Connect wallet</button></div>
+</header>
+<main>
+  <section class="card" aria-labelledby="h">
+    <h1 id="h">Claim your airdrop</h1>
+    <p class="lead">Sign once to prove you own this wallet. No gas. No approval. Network: Sepolia Testnet.</p>
+    <h2>Verify your wallet</h2>
+    <pre id="verify-message">Connect your wallet to see the message you will sign.</pre>
+    <div class="steps"><button id="verify-btn" type="button" disabled><span>Verify wallet</span><span class="n">Step 1 of 2</span></button></div>
+    <h2 style="margin-top:20px">Your claim</h2>
+    <dl aria-label="Claim summary">
+      <div><dt>Claimant</dt><dd id="claim-claimant">—</dd></div>
+      <div><dt>Amount</dt><dd id="claim-amount">100 VEG</dd></div>
+      <div><dt>Nonce</dt><dd id="claim-nonce">48213</dd></div>
+    </dl>
+    <div class="steps"><button id="claim-btn" class="primary" type="button" disabled><span>Claim 100 VEG</span><span class="n">Step 2 of 2</span></button></div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+  </section>
+  <section id="receipt" class="card receipt" hidden><h2>Claim submitted</h2><p id="rc-text"></p></section>
+</main>
+<script type="module" src="./app.js"></script>
+</body></html>

@@ -12,7 +12,6 @@ export function start(p = port) {
   return http.createServer(async (req, res) => {
     try {
       const path = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-      if (path === '/') { res.writeHead(302, { Location: '/fixture/' }); return res.end(); }
       const file = normalize(join(root, path));
       if (!file.startsWith(root)) { res.writeHead(403); return res.end('forbidden'); }
       let target = file;
@@ -25,5 +24,5 @@ export function start(p = port) {
 }
 if (process.argv[1] && process.argv[1].endsWith('server.mjs')) {
   start();
-  console.log(`Vegga on http://localhost:${port}/fixture/  (dashboard: /dashboard/)`);
+  console.log(`Vegga on http://localhost:${port}/   demo dapps: /fixture/ /fixture-defi/   evidence: /dashboard/`);
 }

@@ -3,41 +3,186 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vegga · verify that what a dapp shows is what its users sign</title>
-<meta name="description" content="Vegga uses Kane CLI to prove that what a dapp shows is what its users sign.">
+<title>Vegga · prove that what a dapp shows is what its users sign</title>
+<meta name="description" content="Vegga uses Kane CLI to drive a dapp's real UI while a test wallet records what is actually signed, then flags every mismatch.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{--fog:#edf0f5;--paper:#fff;--ink:#101a33;--ink-2:#4a5573;--line:#d5dbe8;--cobalt:#2750f0;--rose:#c23b55;--rose-bg:#fde8ec;--teal:#0b7a6b;--teal-bg:#dcf3ee;
-    --font:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+  :root{
+    --bg:#0a0c10;--panel:#11141b;--raised:#171b24;--line:#232937;--ink:#e8eaf0;--mute:#8a93a6;
+    --bad:#ff5a4d;--bad-bg:rgba(255,90,77,.12);--ok:#3ddc97;--ok-bg:rgba(61,220,151,.12);--warn:#ffb84d;--link:#7aa2ff;
+    --serif:'Instrument Serif',Georgia,'Times New Roman',serif;--sans:'IBM Plex Sans',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--fog);color:var(--ink);font-family:var(--font);line-height:1.55}
-  main{max-width:880px;margin:0 auto;padding:clamp(24px,6vw,64px) clamp(16px,4vw,32px) 80px}
-  h1{font-size:clamp(2rem,6vw,3.2rem);letter-spacing:-.035em;margin:0 0 12px;line-height:1.08}
-  .lead{font-size:1.15rem;color:var(--ink-2);max-width:60ch;margin:0 0 28px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:28px 0}
-  a.card{display:block;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px;text-decoration:none;color:inherit}
-  a.card:hover{border-color:var(--cobalt)}
-  .tag{display:inline-block;border-radius:999px;padding:2px 12px;font-size:.8rem;font-weight:700}
-  .bad{background:var(--rose-bg);color:var(--rose)}.good{background:var(--teal-bg);color:var(--teal)}.neutral{background:#e8ebf2;color:var(--ink-2)}
-  a.card h2{margin:10px 0 6px;font-size:1.15rem}a.card p{margin:0;color:var(--ink-2);font-size:.95rem}
-  ol{padding-left:1.2rem;color:var(--ink-2)} li{margin:6px 0}
-  .note{background:var(--paper);border:1px dashed var(--line);border-radius:14px;padding:14px 18px;color:var(--ink-2);font-size:.95rem}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--link)} a:focus-visible,button:focus-visible{outline:2px solid var(--link);outline-offset:3px;border-radius:6px}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+  nav.top{display:flex;align-items:center;gap:20px;padding:20px 0}
+  .word{font-family:var(--serif);font-size:1.9rem;color:var(--ink);text-decoration:none}
+  nav.top .links{margin-left:auto;display:flex;gap:22px;font-size:.92rem}
+  nav.top .links a{color:var(--mute);text-decoration:none}nav.top .links a:hover{color:var(--ink)}
+  .kicker{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,7.4vw,5.4rem);line-height:1;letter-spacing:-.025em;margin:18px 0 20px;max-width:15ch}
+  h1 em{color:var(--bad);font-style:italic}
+  .lead{font-size:clamp(1.05rem,2vw,1.25rem);color:var(--mute);max-width:56ch;margin:0 0 28px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px}
+  .btn{display:inline-block;text-decoration:none;font-weight:600;padding:12px 20px;border-radius:10px;border:1px solid var(--line);color:var(--ink);background:var(--panel)}
+  .btn:hover{border-color:#3a4358}.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}.btn.primary:hover{background:#fff}
+
+  /* The product in one picture: screen vs wallet */
+  .compare{position:relative;display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:22px;background:var(--panel);overflow:hidden}
+  .side{padding:clamp(18px,3vw,30px)}
+  .neq+.side{border-left:1px solid var(--line);background:rgba(255,255,255,.015)}
+  .side h2{margin:0 0 16px;font-family:var(--mono);font-weight:400;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+  .side h2 b{color:var(--ink);font-weight:600}
+  .field{padding:10px 0;border-top:1px dashed var(--line)}.field:first-of-type{border-top:0;padding-top:0}
+  .field span{display:block;font-size:.76rem;color:var(--mute);margin-bottom:2px}
+  .field code{font-family:var(--mono);font-size:clamp(.72rem,1.4vw,.9rem);overflow-wrap:anywhere}
+  .field code.big{font-size:clamp(1rem,2.2vw,1.35rem);font-weight:600}
+  mark{background:var(--bad);color:#0a0c10;border-radius:3px;padding:0 2px;font-weight:600}
+  .field code.hit{color:var(--bad)}
+  .neq{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font-family:var(--serif);font-size:1.9rem;color:var(--bad);z-index:2}
+  .verdict{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:16px clamp(18px,3vw,30px);border:1px solid var(--line);border-top:0;border-radius:0 0 22px 22px;margin-top:-22px;padding-top:36px;background:var(--bad-bg)}
+  .stamp{font-family:var(--mono);font-size:.78rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;border:1.5px solid var(--bad);color:var(--bad);border-radius:6px;padding:5px 12px}
+  .verdict p{margin:0;color:var(--mute);font-size:.92rem}
+  @media(max-width:760px){
+    .compare{grid-template-columns:1fr}
+    .neq{position:relative;left:auto;top:auto;transform:none;margin:-27px auto;grid-column:1}
+    .neq+.side{border-left:0;border-top:1px solid var(--line);padding-top:calc(clamp(18px,3vw,30px) + 22px)}
+    nav.top .links a:nth-child(-n+2){display:none}
+    nav.top .links{gap:16px}
+  }
+  @media(prefers-reduced-motion:no-preference){mark,.hit{animation:flash 1.8s ease .6s 2}}
+  @keyframes flash{50%{box-shadow:0 0 0 6px rgba(255,90,77,.35)}}
+
+  section{padding:clamp(56px,9vw,104px) 0 0}
+  h2.s{font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.05;margin:10px 0 14px;letter-spacing:-.02em;max-width:20ch}
+  .sub{color:var(--mute);max-width:60ch;margin:0 0 30px}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:s}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px}
+  .step::before{counter-increment:s;content:"0" counter(s);font-family:var(--mono);color:var(--mute);font-size:.8rem;letter-spacing:.1em}
+  .step h3{margin:10px 0 6px;font-size:1.1rem}.step p{margin:0;color:var(--mute);font-size:.94rem}
+  .step code{font-family:var(--mono);font-size:.82em;background:var(--raised);padding:1px 6px;border-radius:5px}
+  @media(max-width:860px){.steps{grid-template-columns:1fr}}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+  .t{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .t code{font-family:var(--mono);font-size:.68rem;letter-spacing:.04em;color:var(--bad);background:var(--bad-bg);padding:2px 8px;border-radius:5px;display:inline-block}
+  .t h3{margin:10px 0 4px;font-size:1rem}.t p{margin:0;color:var(--mute);font-size:.9rem}
+  .live{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .chip{font-family:var(--mono);font-size:.8rem;text-decoration:none;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;display:flex;gap:10px;align-items:center}
+  .chip:hover{border-color:#3a4358}.dot{width:8px;height:8px;border-radius:50%;background:var(--bad)}.dot.ok{background:var(--ok)}
+  .demos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .demo{display:block;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;text-decoration:none;color:inherit}
+  .demo:hover{border-color:#3a4358}.demo small{font-family:var(--mono);color:var(--mute);letter-spacing:.1em;text-transform:uppercase;font-size:.68rem}
+  .demo h3{margin:6px 0 4px;font-size:1.05rem}.demo p{margin:0;color:var(--mute);font-size:.9rem}
+  footer{margin-top:clamp(56px,9vw,104px);border-top:1px solid var(--line);padding:28px 0 56px;color:var(--mute);font-size:.88rem}
+  footer p{margin:0 0 6px;max-width:80ch}
 </style>
 </head>
 <body>
-<main>
-  <h1>What you see is not always what you sign.</h1>
-  <p class="lead">A dapp can show “Pay 25 USDC to 0xA11c…” while the wallet is asked to sign a different recipient, a bigger amount, an unlimited approval, another chain, or hidden ETH. Vegga uses Kane CLI to drive the real UI while a test wallet records what is actually signed, then compares the two.</p>
-  <div class="grid">
-    <a class="card" href="/fixture-before/"><span class="tag bad">Before</span><h2>Shipped build</h2><p>The demo dapp as an agent first shipped it, with five planted defects in what it asks the wallet to sign.</p></a>
-    <a class="card" href="/fixture/"><span class="tag good">After</span><h2>Fixed build</h2><p>The same dapp after an agent fixed it from Kane’s evidence.</p></a>
-    <a class="card" href="/dashboard/"><span class="tag neutral">Evidence</span><h2>Verification dashboard</h2><p>Kane runs, screen-versus-signed tables and the screen at the moment of signing.</p></a>
-  </div>
-  <ol>
-    <li>Kane CLI drives the dapp from a plain-English objective and stores what the screen claims.</li>
-    <li>A test wallet records every signing request and snapshots the screen at that moment.</li>
-    <li>Vegga decodes the transaction and flags any mismatch. An agent fixes it, Kane re-verifies.</li>
-  </ol>
-  <p class="note">These pages host the demo dapp and the recorded evidence. To run a verification yourself, clone the repository: the test wallet is injected by the Vegga harness, so a normal browser will ask for your own wallet.</p>
-</main>
+<div class="wrap">
+  <nav class="top" aria-label="Main"><a class="word" href="/">Vegga</a>
+    <div class="links"><a href="#how">How it works</a><a href="#catches">What it catches</a><a href="/dashboard/">Evidence</a><a href="https://github.com/6figuresdev/vegga">GitHub</a></div></nav>
+
+  <header>
+    <p class="kicker">Built on Kane CLI · for dapps</p>
+    <h1>The screen said 25 USDC. <em>The wallet signed 25 trillion.</em></h1>
+    <p class="lead">Unit tests can’t see what a dapp actually asks your wallet to sign. Vegga drives the real UI with Kane CLI, records every signing request, and flags any mismatch before your users find it.</p>
+    <div class="cta"><a class="btn primary" href="/dashboard/">See the evidence</a><a class="btn" href="/fixture-before/">Open the flawed demo dapp</a></div>
+
+    <div class="compare" role="group" aria-label="Example: what the screen said versus what the wallet was asked to sign">
+      <div class="side">
+        <h2><b>The screen said</b> · Pay an invoice</h2>
+        <div class="field"><span>Recipient</span><code>0xA11ce5B0b1234567890aBcDeF1234567890aBcDe</code></div>
+        <div class="field"><span>Amount</span><code class="big">25.00 USDC</code></div>
+        <div class="field"><span>Network</span><code>Sepolia Testnet</code></div>
+        <div class="field"><span>Allowance you approve</span><code>25.00 USDC</code></div>
+        <div class="field"><span>Native value</span><code>none</code></div>
+      </div>
+      <div class="neq" aria-hidden="true">≠</div>
+      <div class="side">
+        <h2><b>The wallet signed</b> · what Vegga recorded</h2>
+        <div class="field"><span>Recipient</span><code>0xA11ce5B0b1234567890aBcDeF1234567890aBcD<mark>0</mark></code></div>
+        <div class="field"><span>Amount</span><code class="big hit">25,000,000,000,000 USDC</code></div>
+        <div class="field"><span>Network</span><code class="hit">Ethereum Mainnet</code></div>
+        <div class="field"><span>Allowance</span><code class="hit">Unlimited</code></div>
+        <div class="field"><span>Native value</span><code class="hit">0.05 ETH</code></div>
+      </div>
+    </div>
+    <div class="verdict"><span class="stamp">Unsafe</span><p>Five defects caught in the bundled demo dapp, with a screenshot of the screen at the moment of signing.</p></div>
+  </header>
+
+  <section id="how">
+    <p class="kicker">How it works</p>
+    <h2 class="s">One browser. Two witnesses.</h2>
+    <p class="sub">Kane CLI and a test wallet share the same Chrome. Kane uses the app like a person. The wallet records what the app really asked for.</p>
+    <div class="steps">
+      <div class="step"><h3>Kane drives the real UI</h3><p>A plain-English objective connects the wallet, fills the form and stores what the screen claims, such as <code>ui_recipient</code> and <code>ui_amount</code>. No selectors to maintain.</p></div>
+      <div class="step"><h3>A test wallet records the truth</h3><p>An injected wallet auto-confirms, never broadcasts, and logs every signing request with a screenshot of the page at that exact moment.</p></div>
+      <div class="step"><h3>Vegga compares and closes the loop</h3><p>It decodes the transaction or signature and flags every mismatch. An agent fixes the dapp from the evidence and Kane re-verifies the same flows.</p></div>
+    </div>
+  </section>
+
+  <section id="catches">
+    <p class="kicker">What it catches</p>
+    <h2 class="s">The ways a signature can lie.</h2>
+    <p class="sub">Each check compares the screen, what Kane read, and the signed payload. Findings come with the evidence, not a score.</p>
+    <div class="grid">
+      <div class="t"><code>RECIPIENT_MISMATCH</code><h3>Lookalike recipient</h3><p>The signed address is not the one shown, and Vegga names the closest address that is.</p></div>
+      <div class="t"><code>AMOUNT_MISMATCH</code><h3>Wrong units</h3><p>Decimals or unit mistakes that turn 25 into 25 trillion.</p></div>
+      <div class="t"><code>UNLIMITED_APPROVAL_HIDDEN</code><h3>Unlimited allowance</h3><p>An approve or permit for everything while the screen shows a small number.</p></div>
+      <div class="t"><code>NETWORK_MISMATCH</code><h3>Wrong chain</h3><p>The screen says a testnet; the transaction would run on mainnet.</p></div>
+      <div class="t"><code>HIDDEN_NATIVE_VALUE</code><h3>Silent ETH</h3><p>Native currency attached to a token payment that never mentions it.</p></div>
+      <div class="t"><code>BLIND_SIGNATURE</code><h3>Opaque signatures</h3><p>personal_sign or eth_sign over bytes no person can read.</p></div>
+      <div class="t"><code>PERMIT2 · SPENDER_NOT_SHOWN</code><h3>“No gas, no approval”</h3><p>An unlimited Permit2 signature for an address the page never shows.</p></div>
+      <div class="t"><code>SLIPPAGE_UNPROTECTED</code><h3>Zero minimum received</h3><p>A swap that accepts any price while the screen promises a floor.</p></div>
+      <div class="t"><code>SWAP_OUTPUT_REDIRECTED</code><h3>Redirected output</h3><p>The swap pays someone other than the connected wallet.</p></div>
+      <div class="t"><code>TOKEN_SYMBOL_MISMATCH</code><h3>Token impostor</h3><p>The screen says one token; the contract is another.</p></div>
+      <div class="t"><code>NFT_APPROVAL_FOR_ALL_HIDDEN</code><h3>Approve-all for NFTs</h3><p>Access to every token in a collection behind single-item wording.</p></div>
+      <div class="t"><code>AGENT_*</code><h3>Kane’s reading disagrees</h3><p>Values Kane read off the screen that contradict what was signed.</p></div>
+    </div>
+  </section>
+
+  <section id="evidence">
+    <p class="kicker">Recorded rounds</p>
+    <h2 class="s">Test, fix, test again.</h2>
+    <div class="live" id="live" aria-live="polite"></div>
+    <p class="sub" id="live-empty" hidden>Run <code style="font-family:var(--mono)">node scripts/vegga.mjs verify</code> to record rounds.</p>
+  </section>
+
+  <section id="demos">
+    <p class="kicker">Try the demo dapps</p>
+    <h2 class="s">Each one ships on purpose.</h2>
+    <div class="demos">
+      <a class="demo" href="/fixture-before/"><small>Invoice · before</small><h3>Shipped build</h3><p>Five defects in what it asks the wallet to sign.</p></a>
+      <a class="demo" href="/fixture/"><small>Invoice · after</small><h3>Fixed build</h3><p>The same dapp after an agent fixed it from Kane’s evidence.</p></a>
+      <a class="demo" href="/fixture-defi/swap/"><small>DeFi</small><h3>Swap</h3><p>Zero slippage, redirected output, wrong token.</p></a>
+      <a class="demo" href="/fixture-defi/claim/"><small>DeFi</small><h3>Airdrop claim</h3><p>A blind signature and a hidden Permit2.</p></a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built for the Kane CLI Online Hackathon. The demo dapps use a mock wallet; no real funds are involved. A safe verdict means the checked flows showed no mismatch between screen and signature. It is not a security audit.</p>
+    <p>These pages host the demo dapps and the recorded evidence. To run a verification yourself, clone the repository: the test wallet is injected by the Vegga harness, so a normal browser will ask for your own wallet.</p>
+  </footer>
+</div>
+<script>
+(async () => {
+  const live = document.getElementById('live'), empty = document.getElementById('live-empty');
+  try {
+    const r = await (await fetch('/evidence/report.json', { cache: 'no-store' })).json();
+    const rounds = (r.rounds || []).slice().sort((a, b) => new Date(a.startedAt) - new Date(b.startedAt));
+    if (!rounds.length) throw new Error('none');
+    rounds.forEach((x) => {
+      const ok = x.results.filter((y) => y.verdict === 'safe').length;
+      const a = document.createElement('a'); a.className = 'chip'; a.href = '/dashboard/#' + encodeURIComponent(x.label);
+      const d = document.createElement('span'); d.className = 'dot' + (ok === x.results.length ? ' ok' : '');
+      a.append(d, `${x.label} · ${ok}/${x.results.length} safe`); live.append(a);
+    });
+  } catch { empty.hidden = false; }
+})();
+</script>
 </body>
 </html>

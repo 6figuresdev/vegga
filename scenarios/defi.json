@@ -1,0 +1,19 @@
+{
+  "scenarios": [
+    {
+      "id": "SG-03",
+      "title": "Swap 25 USDC for DAI",
+      "path": "swap/",
+      "flow": "swap",
+      "amount": "25",
+      "objective": "Go to {url}. Click 'Connect wallet'. If a button labelled 'Switch to Sepolia Testnet' is visible, click it. Type {amount} into 'Amount to swap (USDC)'. Before clicking any other button, read the swap summary and store: the amount you pay as 'ui_amount', the minimum received as 'ui_min_received', the recipient as 'ui_recipient' and the network as 'ui_network'. Use exactly these variable names. Then click the Approve button and wait until the page says 'Approved'. Then click the Swap button and wait until 'Swap submitted' appears. There is no wallet popup: the test wallet confirms by itself. Do not edit any value after you have stored them."
+    },
+    {
+      "id": "SG-04",
+      "title": "Claim the airdrop",
+      "path": "claim/",
+      "flow": "claim",
+      "objective": "Go to {url}. Click 'Connect wallet'. Read the message shown under 'Verify your wallet' and store it as 'ui_message'. Click 'Verify wallet' and wait until the page says 'Wallet verified'. Then read the claim summary and store the claimant as 'ui_recipient' and the amount as 'ui_amount'. Use exactly these variable names. Click the 'Claim 100 VEG' button and wait until 'Claim submitted' appears. There is no wallet popup: the test wallet confirms by itself."
+    }
+  ]
+}

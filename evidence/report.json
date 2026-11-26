@@ -767,6 +767,626 @@
           }
         }
       ]
+    },
+    {
+      "label": "round-3-defi-shipped",
+      "url": "http://localhost:4173/fixture-defi/",
+      "driver": "kane",
+      "startedAt": "2026-11-26T12:26:29.818Z",
+      "results": [
+        {
+          "id": "SG-03",
+          "title": "Swap 25 USDC for DAI",
+          "verdict": "unsafe",
+          "findings": [
+            {
+              "id": "RECIPIENT_MISMATCH",
+              "severity": "high",
+              "message": "Request #3 (swapExactTokensForTokens) sends to 0xbad0000000000000000000000000000000000bad, which is not on the screen.",
+              "source": "screen"
+            },
+            {
+              "id": "SLIPPAGE_UNPROTECTED",
+              "severity": "high",
+              "message": "Request #3 accepts ANY output amount (minimum received is 0) while the screen promises 24.75 DAI. A sandwich attack can take nearly everything.",
+              "source": "screen"
+            },
+            {
+              "id": "SWAP_OUTPUT_REDIRECTED",
+              "severity": "high",
+              "message": "Request #3 sends the swap output to 0xbad0000000000000000000000000000000000bad, not to the connected wallet 0xBEEF00000000000000000000000000000000BEEF.",
+              "source": "screen"
+            },
+            {
+              "id": "TOKEN_SYMBOL_MISMATCH",
+              "severity": "high",
+              "message": "Request #3 (swapExactTokensForTokens) involves USDT (0xdac17f958d2ee523a2206206994597c13d831ec7), but the screen only mentions USDC, DAI.",
+              "source": "screen"
+            },
+            {
+              "id": "AGENT_RECIPIENT_MISMATCH",
+              "severity": "high",
+              "message": "The agent read the recipient as 0xBEEF00000000000000000000000000000000BEEF, but request #3 signs 0xbad0000000000000000000000000000000000bad.",
+              "source": "kane"
+            },
+            {
+              "id": "RECIPIENT_MISMATCH",
+              "severity": "high",
+              "message": "Request #4 (swapExactTokensForTokens) sends to 0xbad0000000000000000000000000000000000bad, which is not on the screen.",
+              "source": "screen"
+            },
+            {
+              "id": "SLIPPAGE_UNPROTECTED",
+              "severity": "high",
+              "message": "Request #4 accepts ANY output amount (minimum received is 0) while the screen promises 24.75 DAI. A sandwich attack can take nearly everything.",
+              "source": "screen"
+            },
+            {
+              "id": "SWAP_OUTPUT_REDIRECTED",
+              "severity": "high",
+              "message": "Request #4 sends the swap output to 0xbad0000000000000000000000000000000000bad, not to the connected wallet 0xBEEF00000000000000000000000000000000BEEF.",
+              "source": "screen"
+            },
+            {
+              "id": "TOKEN_SYMBOL_MISMATCH",
+              "severity": "high",
+              "message": "Request #4 (swapExactTokensForTokens) involves USDT (0xdac17f958d2ee523a2206206994597c13d831ec7), but the screen only mentions USDC, DAI.",
+              "source": "screen"
+            },
+            {
+              "id": "AGENT_RECIPIENT_MISMATCH",
+              "severity": "high",
+              "message": "The agent read the recipient as 0xBEEF00000000000000000000000000000000BEEF, but request #4 signs 0xbad0000000000000000000000000000000000bad.",
+              "source": "kane"
+            }
+          ],
+          "rows": [
+            {
+              "label": "Spender (approve)",
+              "shown": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+              "signed": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Spender (approve)",
+              "shown": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+              "signed": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Recipient (swapExactTokensForTokens)",
+              "shown": "not on screen",
+              "signed": "0xbad0000000000000000000000000000000000bad",
+              "status": "bad"
+            },
+            {
+              "label": "Amount (swapExactTokensForTokens)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Minimum received",
+              "shown": "24.75 DAI",
+              "signed": "0 (any price accepted)",
+              "status": "bad"
+            },
+            {
+              "label": "Recipient (swapExactTokensForTokens)",
+              "shown": "not on screen",
+              "signed": "0xbad0000000000000000000000000000000000bad",
+              "status": "bad"
+            },
+            {
+              "label": "Amount (swapExactTokensForTokens)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Minimum received",
+              "shown": "24.75 DAI",
+              "signed": "0 (any price accepted)",
+              "status": "bad"
+            }
+          ],
+          "requests": [
+            {
+              "n": 1,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-3-defi-shipped-SG-03-1.png"
+            },
+            {
+              "n": 2,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-3-defi-shipped-SG-03-2.png"
+            },
+            {
+              "n": 3,
+              "method": "eth_sendTransaction",
+              "fn": "swapExactTokensForTokens",
+              "to": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-3-defi-shipped-SG-03-3.png"
+            },
+            {
+              "n": 4,
+              "method": "eth_sendTransaction",
+              "fn": "swapExactTokensForTokens",
+              "to": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-3-defi-shipped-SG-03-4.png"
+            }
+          ],
+          "driver": "kane",
+          "kane": {
+            "status": "passed",
+            "summary": "You asked to connect a wallet, enter 25 USDC for a swap, approve the token, and submit the swap.\nConnected the wallet and switched to the Sepolia Testnet when prompted.\nEntered 25 USDC and reviewed the swap summary: 25.00 USDC paid, at least 24.75 DAI received, sent to 0xBEEF00000000000000000000000000000000BEEF on Sepolia Testnet.\nApproved the swap and submitted it successfully.",
+            "testUrl": "https://test-manager.lambdatest.com/projects/01M8ATGT65KCRQ67B7QA9CA832/test-cases/01M8BWVYYFYE3RQR64RZPD687V/dashboard/share/US_4ARMH4HNOACXFIX6IB7BEOVKP3VRHOK4Q84U9GBQ2CF0VHQEUPBP9QZMBM4EJ072?type=summary&agentView=true&fqdn=summary-page",
+            "duration": 108.2,
+            "finalState": {
+              "url": "http://localhost:4173/fixture-defi/swap/",
+              "ui_amount": "25.00 USDC",
+              "ui_min_received": "24.75 DAI",
+              "ui_recipient": "0xBEEF00000000000000000000000000000000BEEF",
+              "ui_network": "Sepolia Testnet"
+            },
+            "failedStep": null
+          }
+        },
+        {
+          "id": "SG-04",
+          "title": "Claim the airdrop",
+          "verdict": "unsafe",
+          "findings": [
+            {
+              "id": "BLIND_SIGNATURE",
+              "severity": "high",
+              "message": "Request #1 (personal_sign) asks to sign 32 bytes of opaque data that no person can read. A blind signature can authorise anything.",
+              "source": "screen"
+            },
+            {
+              "id": "BLIND_SIGNATURE",
+              "severity": "high",
+              "message": "Request #2 (personal_sign) asks to sign 32 bytes of opaque data that no person can read. A blind signature can authorise anything.",
+              "source": "screen"
+            },
+            {
+              "id": "SPENDER_NOT_SHOWN",
+              "severity": "high",
+              "message": "Request #3 (permit2) grants access to 0xBAD0000000000000000000000000000000000BAD, which the screen never shows. This is a signature, so nothing appears as a transaction in the wallet.",
+              "source": "screen"
+            },
+            {
+              "id": "UNLIMITED_APPROVAL_HIDDEN",
+              "severity": "high",
+              "message": "Request #3 (permit2) asks for an UNLIMITED allowance while the screen shows no allowance at all.",
+              "source": "screen"
+            },
+            {
+              "id": "SPENDER_NOT_SHOWN",
+              "severity": "high",
+              "message": "Request #4 (permit2) grants access to 0xBAD0000000000000000000000000000000000BAD, which the screen never shows. This is a signature, so nothing appears as a transaction in the wallet.",
+              "source": "screen"
+            },
+            {
+              "id": "UNLIMITED_APPROVAL_HIDDEN",
+              "severity": "high",
+              "message": "Request #4 (permit2) asks for an UNLIMITED allowance while the screen shows no allowance at all.",
+              "source": "screen"
+            },
+            {
+              "id": "PERMIT_LONG_LIVED",
+              "severity": "warn",
+              "message": "Request #3 (permit2) stays valid for more than a year (effectively never expires).",
+              "source": "screen"
+            },
+            {
+              "id": "PERMIT_LONG_LIVED",
+              "severity": "warn",
+              "message": "Request #4 (permit2) stays valid for more than a year (effectively never expires).",
+              "source": "screen"
+            }
+          ],
+          "rows": [
+            {
+              "label": "Message (personal_sign)",
+              "shown": "no readable message on screen",
+              "signed": "opaque data, 32 bytes",
+              "status": "bad"
+            },
+            {
+              "label": "Message (personal_sign)",
+              "shown": "no readable message on screen",
+              "signed": "opaque data, 32 bytes",
+              "status": "bad"
+            },
+            {
+              "label": "Spender (permit2)",
+              "shown": "not on screen",
+              "signed": "0xBAD0000000000000000000000000000000000BAD",
+              "status": "bad"
+            },
+            {
+              "label": "Allowance (permit2)",
+              "shown": "00000000000000000000000000000000BEEF",
+              "signed": "Unlimited",
+              "status": "bad"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Spender (permit2)",
+              "shown": "not on screen",
+              "signed": "0xBAD0000000000000000000000000000000000BAD",
+              "status": "bad"
+            },
+            {
+              "label": "Allowance (permit2)",
+              "shown": "00000000000000000000000000000000BEEF",
+              "signed": "Unlimited",
+              "status": "bad"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            }
+          ],
+          "requests": [
+            {
+              "n": 1,
+              "method": "personal_sign",
+              "fn": "personal_sign",
+              "to": null,
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-3-defi-shipped-SG-04-1.png"
+            },
+            {
+              "n": 2,
+              "method": "personal_sign",
+              "fn": "personal_sign",
+              "to": null,
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-3-defi-shipped-SG-04-2.png"
+            },
+            {
+              "n": 3,
+              "method": "eth_signTypedData_v4",
+              "fn": "permit2",
+              "to": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-3-defi-shipped-SG-04-3.png"
+            },
+            {
+              "n": 4,
+              "method": "eth_signTypedData_v4",
+              "fn": "permit2",
+              "to": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-3-defi-shipped-SG-04-4.png"
+            }
+          ],
+          "driver": "kane",
+          "kane": {
+            "status": "passed",
+            "summary": "Connected the wallet and displayed the wallet verification details.\nVerified wallet 0xBEEF00000000000000000000000000000000BEEF successfully.\nReviewed the claim summary for 100 VEG and submitted the claim.\nThe page confirmed that the claim was submitted.",
+            "testUrl": "https://test-manager.lambdatest.com/projects/01M8ATGT65KCRQ67B7QA9CA832/test-cases/01M8BX0H3Q25XCGSFNMM8N6H86/dashboard/share/US_L81C79NC5EYM9DO4DA6KRCR5NRHA6NHRMZGN0VA3Y4MEX74W7H6PB53V157LW6LS?type=summary&agentView=true&fqdn=summary-page",
+            "duration": 109.4,
+            "finalState": {
+              "url": "http://localhost:4173/fixture-defi/claim/",
+              "wallet": "0xBEEF00000000000000000000000000000000BEEF",
+              "claim_amount": "100 VEG",
+              "claim_status": "Claim submitted"
+            },
+            "failedStep": null
+          }
+        }
+      ]
+    },
+    {
+      "label": "round-4-defi-fixed",
+      "url": "http://localhost:4173/fixture-defi/?bugs=none",
+      "driver": "kane",
+      "startedAt": "2026-11-26T12:31:31.823Z",
+      "results": [
+        {
+          "id": "SG-03",
+          "title": "Swap 25 USDC for DAI",
+          "verdict": "safe",
+          "findings": [],
+          "rows": [
+            {
+              "label": "Spender (approve)",
+              "shown": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+              "signed": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Spender (approve)",
+              "shown": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+              "signed": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Recipient (swapExactTokensForTokens)",
+              "shown": "0xbeef00000000000000000000000000000000beef",
+              "signed": "0xbeef00000000000000000000000000000000beef",
+              "status": "ok"
+            },
+            {
+              "label": "Amount (swapExactTokensForTokens)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Minimum received",
+              "shown": "24.75 DAI",
+              "signed": "24.75 DAI",
+              "status": "ok"
+            },
+            {
+              "label": "Recipient (swapExactTokensForTokens)",
+              "shown": "0xbeef00000000000000000000000000000000beef",
+              "signed": "0xbeef00000000000000000000000000000000beef",
+              "status": "ok"
+            },
+            {
+              "label": "Amount (swapExactTokensForTokens)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Minimum received",
+              "shown": "24.75 DAI",
+              "signed": "24.75 DAI",
+              "status": "ok"
+            }
+          ],
+          "requests": [
+            {
+              "n": 1,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-4-defi-fixed-SG-03-1.png"
+            },
+            {
+              "n": 2,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-4-defi-fixed-SG-03-2.png"
+            },
+            {
+              "n": 3,
+              "method": "eth_sendTransaction",
+              "fn": "swapExactTokensForTokens",
+              "to": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-4-defi-fixed-SG-03-3.png"
+            },
+            {
+              "n": 4,
+              "method": "eth_sendTransaction",
+              "fn": "swapExactTokensForTokens",
+              "to": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-4-defi-fixed-SG-03-4.png"
+            }
+          ],
+          "driver": "kane",
+          "kane": {
+            "status": "passed",
+            "summary": "Connected the wallet and switched to the Sepolia Testnet when prompted.\nEntered 25 USDC for the swap and recorded the swap summary: 25.00 USDC paid, at least 24.75 DAI received, sent to 0xBEEF00000000000000000000000000000000BEEF on Sepolia Testnet.\nApproved the USDC and submitted the swap successfully.",
+            "testUrl": "https://test-manager.lambdatest.com/projects/01M8ATGT65KCRQ67B7QA9CA832/test-cases/01M8BX4V7PWHTRSFF9CFM9Z2F8/dashboard/share/US_8HUT10C0QCYWVXF2MLGVVDK1045NG3NPTGQ3RI668BFGLZ5XLS9HOGMZ9UITRVY4?type=summary&agentView=true&fqdn=summary-page",
+            "duration": 125,
+            "finalState": {
+              "url": "http://localhost:4173/fixture-defi/swap/?bugs=none",
+              "ui_amount": "25.00 USDC",
+              "ui_min_received": "24.75 DAI",
+              "ui_recipient": "0xBEEF00000000000000000000000000000000BEEF",
+              "ui_network": "Sepolia Testnet"
+            },
+            "failedStep": null
+          }
+        },
+        {
+          "id": "SG-04",
+          "title": "Claim the airdrop",
+          "verdict": "safe",
+          "findings": [],
+          "rows": [
+            {
+              "label": "Message (personal_sign)",
+              "shown": "Vegga Airdrop",
+              "signed": "Vegga Airdrop",
+              "status": "ok"
+            },
+            {
+              "label": "Message (personal_sign)",
+              "shown": "Vegga Airdrop",
+              "signed": "Vegga Airdrop",
+              "status": "ok"
+            },
+            {
+              "label": "Typed data (Claim)",
+              "shown": "all values on screen",
+              "signed": "3 fields",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Typed data (Claim)",
+              "shown": "all values on screen",
+              "signed": "3 fields",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            }
+          ],
+          "requests": [
+            {
+              "n": 1,
+              "method": "personal_sign",
+              "fn": "personal_sign",
+              "to": null,
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-4-defi-fixed-SG-04-1.png"
+            },
+            {
+              "n": 2,
+              "method": "personal_sign",
+              "fn": "personal_sign",
+              "to": null,
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-4-defi-fixed-SG-04-2.png"
+            },
+            {
+              "n": 3,
+              "method": "eth_signTypedData_v4",
+              "fn": "eth_signTypedData_v4",
+              "to": "0xD157D157D157D157D157D157D157D157D157D157",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-4-defi-fixed-SG-04-3.png"
+            },
+            {
+              "n": 4,
+              "method": "eth_signTypedData_v4",
+              "fn": "eth_signTypedData_v4",
+              "to": "0xD157D157D157D157D157D157D157D157D157D157",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-4-defi-fixed-SG-04-4.png"
+            }
+          ],
+          "driver": "kane",
+          "kane": {
+            "status": "passed",
+            "summary": "Connected the wallet and displayed the wallet verification details.\nVerified the wallet successfully; the claim summary showed claimant 0xBEEF00000000000000000000000000000000BEEF and amount 100 VEG.\nSubmitted the claim for 100 VEG, and the claim was confirmed as submitted.",
+            "testUrl": "https://test-manager.lambdatest.com/projects/01M8ATGT65KCRQ67B7QA9CA832/test-cases/01M8BX9PFC0EJR72V1NKHRX960/dashboard/share/US_F7X3RUFCR8HK4AHJ1DMRQ77XCW2VOXBFN9I39IP15LBYD3M3UTTX99VGTETAYSYD?type=summary&agentView=true&fqdn=summary-page",
+            "duration": 107.7,
+            "finalState": {
+              "url": "http://localhost:4173/fixture-defi/claim/?bugs=none",
+              "ui_message": "Vegga Airdrop\nVerify wallet 0xBEEF00000000000000000000000000000000BEEF\nNonce: 48213",
+              "ui_recipient": "0xBEEF00000000000000000000000000000000BEEF",
+              "ui_amount": "100 VEG"
+            },
+            "failedStep": null
+          }
+        }
+      ]
     }
   ]
 }

@@ -3,57 +3,84 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vegga · what you see vs what you sign</title>
+<title>Vegga · evidence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{--fog:#edf0f5;--paper:#fff;--ink:#101a33;--ink-2:#4a5573;--line:#d5dbe8;--cobalt:#2750f0;--teal:#0b7a6b;--teal-bg:#dcf3ee;--rose:#c23b55;--rose-bg:#fde8ec;--amber:#8a5a00;--amber-bg:#fff1d3;--grey-bg:#e8ebf2;
-    --font:'Bricolage Grotesque',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  :root{
+    --bg:#0a0c10;--panel:#11141b;--raised:#171b24;--line:#232937;--ink:#e8eaf0;--mute:#8a93a6;
+    --bad:#ff5a4d;--bad-bg:rgba(255,90,77,.12);--ok:#3ddc97;--ok-bg:rgba(61,220,151,.12);--warn:#ffb84d;--warn-bg:rgba(255,184,77,.12);--link:#7aa2ff;
+    --serif:'Instrument Serif',Georgia,'Times New Roman',serif;--sans:'IBM Plex Sans',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--fog);color:var(--ink);font-family:var(--font);line-height:1.5;font-variant-numeric:tabular-nums}
-  header,main{max-width:1120px;margin:0 auto;padding-left:clamp(16px,4vw,40px);padding-right:clamp(16px,4vw,40px)}
-  header{padding-top:clamp(20px,4vw,44px)}
-  h1{margin:0;font-size:clamp(1.8rem,4vw,2.7rem);letter-spacing:-.03em;font-weight:800}
-  header p{margin:6px 0 0;color:var(--ink-2);max-width:68ch}
-  main{padding-top:20px;padding-bottom:80px;display:grid;gap:28px}
-  .arc{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
-  .stat{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 18px;min-width:200px}
-  .stat b{display:block;font-size:2rem;letter-spacing:-.03em}.stat span{color:var(--ink-2);font-size:.9rem}
-  .stat.bad{border-color:var(--rose)}.stat.good{border-color:var(--teal)}
-  .arrow{align-self:center;color:var(--ink-2);font-size:1.6rem}
-  .round>h2{margin:0 0 10px;font-size:1.05rem;color:var(--ink-2);font-weight:600}
-  .flow{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,3vw,26px);margin-bottom:14px}
-  .head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
-  .head h3{margin:0;font-size:1.2rem}
-  .pill{display:inline-block;border-radius:999px;padding:3px 12px;font-weight:600;font-size:.85rem}
-  .safe{background:var(--teal-bg);color:var(--teal)}.unsafe{background:var(--rose-bg);color:var(--rose)}.inconclusive{background:var(--amber-bg);color:var(--amber)}
-  .cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px}
-  @media(max-width:860px){.cols{grid-template-columns:1fr}}
-  table{border-collapse:collapse;width:100%;font-size:.9rem}
-  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{color:var(--ink-2);font-weight:600;background:#f7f8fb}
-  td.m{font-family:var(--mono);font-size:.78rem;overflow-wrap:anywhere}
-  .st{font-weight:800}.st.ok{color:var(--teal)}.st.bad{color:var(--rose)}.st.warn{color:var(--amber)}
-  .shots{display:flex;gap:10px;flex-wrap:wrap}
-  .shots figure{margin:0;flex:1 1 150px;max-width:240px}
-  .shots img{width:100%;border:1px solid var(--line);border-radius:10px;display:block}
-  .shots figcaption{font-size:.78rem;color:var(--ink-2);margin-top:4px}
-  ul.f{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
-  ul.f li{display:flex;gap:10px;align-items:flex-start;font-size:.92rem}
-  .sev{flex:none;border-radius:6px;padding:1px 8px;font-size:.72rem;font-weight:800;text-transform:uppercase}
-  .sev.high{background:var(--rose-bg);color:var(--rose)}.sev.warn{background:var(--amber-bg);color:var(--amber)}.sev.inconclusive{background:var(--grey-bg);color:var(--ink-2)}
-  .sub{color:var(--ink-2);font-size:.85rem}a{color:var(--cobalt)}
-  .empty{background:var(--paper);border:1px dashed var(--line);border-radius:18px;padding:32px;max-width:64ch}
-  code{background:var(--grey-bg);padding:2px 6px;border-radius:6px}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--link)} a:focus-visible,button:focus-visible{outline:2px solid var(--link);outline-offset:3px;border-radius:6px}
+  .bar{display:flex;align-items:center;gap:14px;padding:16px clamp(16px,4vw,40px);border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(10,12,16,.92);backdrop-filter:blur(8px);z-index:5}
+  .word{font-family:var(--serif);font-size:1.7rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+  .tag{font-family:var(--mono);font-size:.72rem;color:var(--mute);text-transform:uppercase;letter-spacing:.12em}
+  .bar nav{margin-left:auto;display:flex;gap:18px;font-size:.9rem}.bar nav a{color:var(--mute);text-decoration:none}.bar nav a:hover{color:var(--ink)}
+  main{max-width:1180px;margin:0 auto;padding:clamp(20px,4vw,48px) clamp(16px,4vw,40px) 96px}
+  .hero{display:flex;flex-wrap:wrap;gap:clamp(16px,4vw,48px);align-items:flex-end;margin-bottom:36px}
+  .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.04;margin:0;letter-spacing:-.02em;max-width:16ch}
+  .hero h1 em{color:var(--ok)}
+  .big{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .num{font-family:var(--mono);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;letter-spacing:-.03em}
+  .num small{display:block;font-size:.7rem;font-weight:400;color:var(--mute);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+  .num.bad{color:var(--bad)}.num.ok{color:var(--ok)}.arrow{color:var(--mute);font-size:1.8rem}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px;padding:0;list-style:none}
+  .tabs button{font:inherit;background:var(--panel);border:1px solid var(--line);color:var(--mute);border-radius:999px;padding:8px 16px;cursor:pointer;display:flex;gap:10px;align-items:center}
+  .tabs button:hover{color:var(--ink);border-color:#2f374a}
+  .tabs button[aria-selected=true]{color:var(--ink);border-color:var(--ink);background:var(--raised)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--mute)}.dot.ok{background:var(--ok)}.dot.bad{background:var(--bad)}
+  .meta{font-family:var(--mono);font-size:.78rem;color:var(--mute);margin:0 0 18px;display:flex;gap:16px;flex-wrap:wrap}
+  .meta b{color:var(--ink);font-weight:600}
+  .flow{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:clamp(16px,3vw,28px);margin-bottom:20px}
+  .head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px}
+  .head h2{margin:0;font-size:1.25rem;font-weight:600}.head .id{font-family:var(--mono);font-size:.75rem;color:var(--mute);letter-spacing:.1em}
+  .stamp{font-family:var(--mono);font-size:.78rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;border:1.5px solid;border-radius:6px;padding:5px 12px}
+  .stamp.safe{color:var(--ok);border-color:var(--ok);background:var(--ok-bg)}.stamp.unsafe{color:var(--bad);border-color:var(--bad);background:var(--bad-bg)}.stamp.inconclusive{color:var(--warn);border-color:var(--warn);background:var(--warn-bg)}
+  .cols{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:24px}
+  @media(max-width:900px){.cols{grid-template-columns:1fr}}
+  .diff{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .drow{display:grid;grid-template-columns:minmax(90px,.7fr) minmax(0,1.2fr) minmax(0,1.2fr) 28px;gap:0;border-top:1px solid var(--line);align-items:stretch}
+  .drow:first-child{border-top:0}
+  .drow>*{padding:11px 13px;min-width:0}
+  .dhead{background:var(--raised);font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+  .dhead .s{color:var(--ink)}
+  .lab{color:var(--mute);font-size:.82rem}
+  .val{font-family:var(--mono);font-size:.76rem;overflow-wrap:anywhere;line-height:1.5}
+  .val.bad{color:var(--bad)}.val.warn{color:var(--warn)}.val.miss{color:var(--mute);font-style:italic}
+  .val mark{background:var(--bad);color:#0a0c10;border-radius:2px;padding:0 1px;font-weight:600}
+  .cell-signed{background:rgba(255,255,255,.015)}
+  .st{display:grid;place-items:center;font-weight:700}.st.ok{color:var(--ok)}.st.bad{color:var(--bad)}.st.warn{color:var(--warn)}
+  .drow.bad{background:var(--bad-bg)}
+  .shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .shots button{all:unset;cursor:zoom-in;display:block;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--raised)}
+  .shots button:focus-visible{outline:2px solid var(--link)}
+  .shots img{width:100%;display:block}.shots span{display:block;padding:6px 10px;font-size:.72rem;color:var(--mute);font-family:var(--mono)}
+  h3.sec{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:0 0 10px;font-weight:400}
+  details{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+  summary{cursor:pointer;font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+  summary b{color:var(--ink)}
+  ul.f{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+  ul.f li{display:grid;grid-template-columns:auto 1fr;gap:12px;font-size:.9rem;align-items:start}
+  .code{font-family:var(--mono);font-size:.68rem;border-radius:5px;padding:2px 8px;white-space:nowrap}
+  .code.high{background:var(--bad-bg);color:var(--bad)}.code.warn{background:var(--warn-bg);color:var(--warn)}.code.inconclusive{background:#222736;color:var(--mute)}
+  .note{margin-top:34px;color:var(--mute);font-size:.85rem;max-width:70ch}
+  .empty{border:1px dashed var(--line);border-radius:18px;padding:32px;max-width:64ch;color:var(--mute)}
+  code{font-family:var(--mono);background:var(--raised);padding:2px 6px;border-radius:6px;color:var(--ink);font-size:.85em}
+  dialog{border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);padding:14px;max-width:min(1100px,94vw)}
+  dialog::backdrop{background:rgba(0,0,0,.72)}dialog img{max-width:100%;border-radius:10px;display:block}
+  dialog button{margin-top:10px;font:inherit;background:var(--raised);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer}
+  @media(max-width:640px){.drow{grid-template-columns:1fr 1fr 24px}.drow .lab{grid-column:1/-1;padding-bottom:0}.dhead .lab{display:none}}
 </style>
 </head>
 <body>
-<header>
-  <h1>What you see vs. what you sign</h1>
-  <p>Vegga lets Kane CLI drive a dapp's real UI while a test wallet records exactly what the dapp asks to sign, then compares the two. Each round: Kane tests, an agent fixes, Kane tests again.</p>
-</header>
-<main id="root"><p class="sub">Loading evidence…</p></main>
+<header class="bar"><a class="word" href="/">Vegga</a><span class="tag">verification evidence</span>
+  <nav><a href="/">Overview</a><a href="https://github.com/6figuresdev/vegga">GitHub</a></nav></header>
+<main id="root"><p style="color:var(--mute)">Loading evidence…</p></main>
+<dialog id="zoom"><img alt="Screen at the moment the wallet was asked to sign"><form method="dialog"><button>Close</button></form></dialog>
 <script>
 (async () => {
   const root = document.getElementById('root');
@@ -61,60 +88,110 @@
   let report; try { report = await (await fetch('../evidence/report.json', { cache: 'no-store' })).json(); } catch {}
   root.textContent = '';
   if (!report || !report.rounds || !report.rounds.length) {
-    const b = el('div', 'empty'); b.append(el('b', '', 'No verification rounds yet.'));
+    const b = el('div', 'empty'); b.append(el('p', '', 'No verification rounds yet.'));
     const p = el('p'); p.append('Run ', el('code', '', 'node scripts/vegga.mjs verify --label round-1-shipped'), ' and reload.'); b.append(p); root.append(b); return;
   }
-  const rounds = report.rounds;
+  const rounds = [...report.rounds].sort((a, b) => new Date(a.startedAt) - new Date(b.startedAt));
   const high = (r) => r.results.reduce((n, x) => n + x.findings.filter((f) => f.severity === 'high').length, 0);
   const safe = (r) => r.results.filter((x) => x.verdict === 'safe').length;
+  const isAddr = (s) => /^0x[0-9a-fA-F]{40}$/.test(s);
 
-  const arc = el('div', 'arc');
-  rounds.forEach((r, i) => {
-    if (i) arc.append(el('div', 'arrow', '→'));
-    const s = el('div', 'stat ' + (safe(r) === r.results.length ? 'good' : 'bad'));
-    s.append(el('b', '', `${safe(r)}/${r.results.length} safe`), el('span', '', `${r.label} · ${high(r)} high-severity findings`));
-    arc.append(s);
+  // Hero: totals across every recorded round
+  const last = rounds[rounds.length - 1];
+  const classes = new Set(rounds.flatMap((r) => r.results.flatMap((x) => x.findings.filter((f) => f.severity === 'high').map((f) => f.id.replace(/^AGENT_/, '')))));
+  const flows = rounds.reduce((n, r) => n + r.results.length, 0);
+  const hero = el('section', 'hero');
+  const h1 = el('h1'); h1.append('What the screen said, ', el('em', '', 'versus what was signed.'));
+  hero.append(h1);
+  const big = el('div', 'big');
+  const stat = (v, label, cls) => { const d = el('div', 'num ' + (cls || '')); d.append(v, el('small', '', label)); return d; };
+  big.append(stat(String(classes.size), 'mismatch classes caught', classes.size ? 'bad' : ''),
+             stat(String(flows), 'flows verified'),
+             stat(`${safe(last)}/${last.results.length}`, `safe in latest round`, safe(last) === last.results.length ? 'ok' : 'bad'));
+  hero.append(big); root.append(hero);
+
+  // Tabs
+  const tabs = el('ul', 'tabs'); tabs.setAttribute('role', 'tablist');
+  const panel = el('div'); panel.setAttribute('role', 'tabpanel');
+  const buttons = rounds.map((r, i) => {
+    const li = el('li'); const b = el('button'); b.type = 'button'; b.setAttribute('role', 'tab');
+    b.append(el('span', 'dot ' + (safe(r) === r.results.length ? 'ok' : 'bad')), `${r.label} · ${safe(r)}/${r.results.length}`);
+    b.addEventListener('click', () => { show(i); history.replaceState(null, '', '#' + encodeURIComponent(r.label)); }); li.append(b); tabs.append(li); return b;
   });
-  root.append(arc);
+  root.append(tabs, panel);
 
-  [...rounds].reverse().forEach((r) => {
-    const sec = el('section', 'round');
-    sec.append(el('h2', '', `${r.label} · ${new Date(r.startedAt).toLocaleString()} · ${r.driver === 'kane' ? 'driven by Kane CLI' : 'scripted smoke driver'}`));
+  const zoom = document.getElementById('zoom');
+  function mark(value, other, status) {
+    const s = el('span', 'val');
+    if (/^not (on screen|stated)|^no readable|^some values/i.test(value)) { s.className = 'val miss'; s.textContent = value; return s; }
+    if (status !== 'ok' && isAddr(value) && isAddr(other)) {
+      for (let i = 0; i < value.length; i++) {
+        if (value[i].toLowerCase() !== other[i].toLowerCase()) s.append(el('mark', '', value[i])); else s.append(document.createTextNode(value[i]));
+      }
+      return s;
+    }
+    if (status === 'bad') s.className = 'val bad'; else if (status === 'warn') s.className = 'val warn';
+    s.textContent = value; return s;
+  }
+
+  function show(i) {
+    buttons.forEach((b, k) => b.setAttribute('aria-selected', String(k === i)));
+    const r = rounds[i]; panel.textContent = '';
+    const meta = el('p', 'meta');
+    const kane = r.driver === 'kane';
+    [['driver', kane ? 'Kane CLI' : 'scripted smoke driver (no AI)'], ['target', r.url], ['when', new Date(r.startedAt).toLocaleString()]].forEach(([k, v]) => { const s = el('span'); s.append(k + ' ', el('b', '', v)); meta.append(s); });
+    panel.append(meta);
     r.results.forEach((x) => {
-      const card = el('div', 'flow'); const head = el('div', 'head');
-      head.append(el('h3', '', `${x.id} · ${x.title}`), el('span', 'pill ' + x.verdict, x.verdict));
+      const card = el('article', 'flow'); const head = el('div', 'head');
+      const t = el('div'); t.append(el('div', 'id', x.id), el('h2', '', x.title)); head.append(t, el('span', 'stamp ' + x.verdict, x.verdict === 'inconclusive' ? 'unclear' : x.verdict));
       card.append(head);
       const cols = el('div', 'cols');
-
       const left = el('div');
       if (x.rows.length) {
-        const t = el('table'); const h = el('tr');
-        ['Check', 'Screen showed', 'Wallet was asked to sign', ''].forEach((c) => h.append(el('th', '', c))); t.append(h);
+        const diff = el('div', 'diff');
+        const h = el('div', 'drow dhead'); h.append(el('div', 'lab', 'Check'), el('div', 's', 'The screen said'), el('div', 's', 'The wallet signed'), el('div')); diff.append(h);
         x.rows.forEach((row) => {
-          const tr = el('tr'); tr.append(el('td', '', row.label), el('td', 'm', row.shown), el('td', 'm', row.signed),
-            el('td', 'st ' + row.status, row.status === 'ok' ? '✔' : row.status === 'bad' ? '✘' : '!'));
-          t.append(tr);
+          const d = el('div', 'drow' + (row.status === 'bad' ? ' bad' : ''));
+          const c1 = el('div'); c1.append(mark(row.shown, row.signed, row.status));
+          const c2 = el('div', 'cell-signed'); c2.append(mark(row.signed, row.shown, row.status));
+          d.append(el('div', 'lab', row.label), c1, c2, el('div', 'st ' + row.status, row.status === 'ok' ? '✓' : row.status === 'bad' ? '✕' : '!'));
+          diff.append(d);
         });
-        left.append(t);
-      } else left.append(el('p', 'sub', 'No signing requests were captured.'));
+        left.append(diff);
+      } else left.append(el('p', 'meta', 'No signing requests were captured.'));
       cols.append(left);
 
-      const right = el('div'); const shots = el('div', 'shots');
-      (x.requests || []).filter((q) => q.shot).forEach((q) => {
-        const fig = el('figure'); const img = el('img'); img.src = `../evidence/shots/${q.shot}`; img.alt = `Screen at signing request ${q.n}`; img.loading = 'lazy';
-        fig.append(img, el('figcaption', '', `Screen when the wallet was asked to sign: #${q.n} ${q.fn}`)); shots.append(fig);
-      });
-      right.append(shots);
-      if (x.kane && x.kane.testUrl && /^https:\/\//.test(x.kane.testUrl)) { const a = el('a', 'sub', 'Open Kane run'); a.href = x.kane.testUrl; a.target = '_blank'; a.rel = 'noopener'; right.append(a); }
+      const right = el('div'); const shots = (x.requests || []).filter((q) => q.shot);
+      if (shots.length) {
+        right.append(el('h3', 'sec', 'Screen when the wallet was asked to sign'));
+        const grid = el('div', 'shots');
+        shots.forEach((q) => {
+          const b = el('button'); b.type = 'button'; b.setAttribute('aria-label', `Enlarge screenshot of request ${q.n}`);
+          const img = el('img'); img.src = `../evidence/shots/${q.shot}`; img.alt = ''; img.loading = 'lazy';
+          b.append(img, el('span', '', `#${q.n} ${q.fn}`));
+          b.addEventListener('click', () => { zoom.querySelector('img').src = img.src; zoom.showModal(); });
+          grid.append(b);
+        });
+        right.append(grid);
+      }
+      if (x.kane && /^https:\/\//.test(x.kane.testUrl || '')) { const a = el('a', '', 'Open the Kane run ↗'); a.href = x.kane.testUrl; a.target = '_blank'; a.rel = 'noopener'; a.style.cssText = 'display:inline-block;margin-top:14px;font-size:.88rem'; right.append(a); }
       cols.append(right); card.append(cols);
 
-      const list = el('ul', 'f');
-      x.findings.forEach((f) => { const li = el('li'); li.append(el('span', 'sev ' + f.severity, f.severity === 'inconclusive' ? 'unclear' : f.severity), el('span', '', `${f.id}: ${f.message}`)); list.append(li); });
-      if (x.findings.length) card.append(list);
-      sec.append(card);
+      const groups = [['high', 'High severity'], ['inconclusive', 'Unclear'], ['warn', 'Warnings']];
+      groups.forEach(([sev, name]) => {
+        const items = x.findings.filter((f) => f.severity === sev); if (!items.length) return;
+        const det = el('details'); if (sev === 'high') det.open = true;
+        const sum = el('summary'); sum.append(`${name} `, el('b', '', `(${items.length})`)); det.append(sum);
+        const ul = el('ul', 'f');
+        items.forEach((f) => { const li = el('li'); li.append(el('span', 'code ' + sev, f.id), el('span', '', f.message)); ul.append(li); });
+        det.append(ul); card.append(det);
+      });
+      panel.append(card);
     });
-    root.append(sec);
-  });
+  }
+  const wanted = rounds.findIndex((r) => r.label === decodeURIComponent(location.hash.slice(1)));
+  show(wanted >= 0 ? wanted : rounds.length - 1);
+  root.append(Object.assign(el('p', 'note', 'A safe verdict means the checked flows showed no mismatch between screen and signature. It is not a security audit. Rounds labelled “scripted smoke driver” test Vegga itself and are not Kane runs.')));
 })();
 </script>
 </body>

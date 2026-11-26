@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { launchChrome, attachWallet } from '../harness/cdp.js';
 import { runKane } from '../harness/kane.js';
 import { scriptDriver } from '../harness/script-driver.js';
-import { analyze } from '../harness/analyze.js';
+import { analyze, normalizeClaims } from '../harness/analyze.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
@@ -40,10 +40,14 @@ if (only) scenarios = scenarios.filter((s) => only.includes(s.id));
 const tokens = {};
 argv.forEach((a, i) => { if (a === '--token' && argv[i + 1]) { const [addr, symbol, dec] = argv[i + 1].split(':'); tokens[addr.toLowerCase()] = { symbol, decimals: Number(dec) }; } });
 const registry = flag('abi') ? JSON.parse(await readFile(flag('abi'), 'utf8')) : {};
-const fill = (s) => s.objective.replaceAll('{url}', url).replaceAll('{recipient}', s.recipient || '').replaceAll('{amount}', s.amount || '');
+const scenarioUrl = (s) => {
+  if (!s.path) return url;
+  const u = new URL(url); u.pathname = u.pathname.replace(/\/?$/, '/') + s.path; return u.toString();
+};
+const fill = (s) => s.objective.replaceAll('{url}', scenarioUrl(s)).replaceAll('{recipient}', s.recipient || '').replaceAll('{amount}', s.amount || '');
 
 if (dry) {
-  for (const s of scenarios) { console.log(`# ${s.id} ${s.title}`); await runKane({ objective: fill(s), url, cdpEndpoint: `http://127.0.0.1:${port}`, dry: true }); }
+  for (const s of scenarios) { console.log(`# ${s.id} ${s.title}`); await runKane({ objective: fill(s), url: scenarioUrl(s), cdpEndpoint: `http://127.0.0.1:${port}`, dry: true }); }
   process.exit(0);
 }
 
@@ -59,9 +63,13 @@ for (const s of scenarios) {
       onLog: (m) => process.stderr.write(`  [wallet] ${m}\n`),
     });
     let drv;
-    if (driver === 'script') drv = await scriptDriver({ wsUrl: chrome.wsUrl, url, recipient: s.recipient, amount: s.amount });
-    else drv = await runKane({ objective: fill(s), url, cdpEndpoint: chrome.endpoint, timeout: Number(flag('timeout', 240)), onProgress: (e) => e.status === 'done' && process.stdout.write(`  · ${e.remark}\n`) });
+    if (driver === 'script') drv = await scriptDriver({ wsUrl: chrome.wsUrl, url: scenarioUrl(s), recipient: s.recipient, amount: s.amount, flow: s.flow });
+    else drv = await runKane({ objective: fill(s), url: scenarioUrl(s), cdpEndpoint: chrome.endpoint, timeout: Number(flag('timeout', 240)), onProgress: (e) => e.status === 'done' && process.stdout.write(`  · ${e.remark}\n`) });
     await sleep(500); await wallet.settle();
+    if (driver === 'kane' && drv.status !== 'skipped') {
+      const keys = Object.keys(normalizeClaims(drv.finalState || {}));
+      if (!keys.some((k) => k.startsWith('ui_'))) console.log(`  ! Kane returned no ui_* values (saw: ${keys.join(', ') || 'none'}). Agent-vs-signed checks were skipped; the screen checks still ran.`);
+    }
 
     const a = analyze({ requests: wallet.requests, claims: drv.finalState || {}, opts: { tokens, registry } });
     if (drv.status !== 'passed' && a.verdict === 'safe') {
