@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vegga Escrow · pay an invoice</title>
+<style>
+  :root{--fog:#edf0f5;--paper:#fff;--ink:#101a33;--ink-2:#4a5573;--line:#d5dbe8;--cobalt:#2750f0;--cobalt-d:#1b3bbd;--amber:#fff4dc;--amber-ink:#7a4a00;--teal:#0b7a6b;--rose:#c23b55;--rose-bg:#fde8ec;
+    --font:'Bricolage Grotesque',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+  *{box-sizing:border-box} html,body{margin:0}
+  body{background:var(--fog);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5;font-variant-numeric:tabular-nums}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px clamp(16px,4vw,40px);border-bottom:1px solid var(--line);background:var(--paper)}
+  .brand{font-weight:800;font-size:1.5rem;letter-spacing:-.03em}.brand small{font-weight:400;color:var(--ink-2);font-size:.85rem;margin-left:8px}
+  .right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+  .chip{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.9rem;background:var(--fog)}
+  button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);padding:10px 16px;font-weight:600}
+  button.primary{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+  button:disabled{opacity:.42;cursor:not-allowed}
+  button:focus-visible,input:focus-visible{outline:3px solid #8ea4ff;outline-offset:2px}
+  main{max-width:760px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,40px) 80px;display:grid;gap:20px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:clamp(18px,3vw,28px)}
+  h1,h2{margin:0 0 14px;letter-spacing:-.02em} h1{font-size:1.9rem;font-weight:800} h2{font-size:1rem;font-weight:600;color:var(--ink-2)}
+  label{display:block;font-weight:600;margin:0 0 6px}
+  input{width:100%;font:inherit;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--fog);color:var(--ink)}
+  input:disabled{opacity:.5} .field{margin-bottom:16px}
+  .hint{font-size:.85rem;color:var(--ink-2);margin-top:4px}
+  .banner{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--amber);color:var(--amber-ink);border:1px solid #f0cf8a;border-radius:14px;padding:14px 18px}
+  .banner p{margin:0}.banner[hidden],.card[hidden]{display:none}
+  dl{margin:0 0 18px;border-top:1px dashed var(--line)}
+  dl div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px dashed var(--line)}
+  dt{color:var(--ink-2)} dd{margin:0;font-weight:600;text-align:right;overflow-wrap:anywhere;font-size:.95rem}
+  .steps{display:grid;gap:10px}
+  .steps button{width:100%;text-align:left;display:flex;justify-content:space-between;align-items:center}
+  .steps .n{font-weight:400;opacity:.75;font-size:.85rem}
+  .status{min-height:1.6em;margin-top:14px;font-weight:600}.status.err{color:var(--rose);background:var(--rose-bg);border-radius:10px;padding:10px 14px}
+  .receipt{border:2px dashed var(--teal)} .receipt h2{color:var(--teal)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">Vegga Escrow<small>invoice payments</small></div>
+  <div class="right">
+    <span id="network-chip" class="chip">Not connected</span>
+    <button id="connect-btn" class="primary" type="button" disabled>Connect wallet</button>
+  </div>
+</header>
+<main>
+  <div id="network-banner" class="banner" role="alert" hidden>
+    <p><strong>Wrong network.</strong> Your wallet is on <span id="banner-network">Ethereum Mainnet</span>. Invoices are paid on Sepolia Testnet.</p>
+    <button id="switch-btn" type="button">Switch to Sepolia Testnet</button>
+  </div>
+
+  <section class="card" aria-labelledby="pay-h">
+    <h1 id="pay-h">Pay an invoice</h1>
+    <div class="field">
+      <label for="recipient">Recipient address</label>
+      <input id="recipient" autocomplete="off" spellcheck="false" placeholder="0x…" disabled>
+      <div id="recipient-hint" class="hint"></div>
+    </div>
+    <div class="field">
+      <label for="amount">Amount (USDC)</label>
+      <input id="amount" inputmode="decimal" autocomplete="off" placeholder="0.00" disabled>
+    </div>
+    <dl aria-label="Payment summary">
+      <div><dt>Recipient</dt><dd id="sum-recipient">—</dd></div>
+      <div><dt>Amount</dt><dd id="sum-amount">—</dd></div>
+      <div><dt>Network</dt><dd id="sum-network">Sepolia Testnet</dd></div>
+      <div><dt>Escrow contract</dt><dd id="sum-spender">0xE5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0</dd></div>
+      <div><dt>Allowance you approve</dt><dd id="sum-approval">—</dd></div>
+    </dl>
+    <div class="steps">
+      <button id="approve-btn" type="button" disabled><span id="approve-label">Approve</span><span class="n">Step 1 of 2</span></button>
+      <button id="pay-btn" class="primary" type="button" disabled><span id="pay-label">Pay</span><span class="n">Step 2 of 2</span></button>
+    </div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+  </section>
+
+  <section id="receipt" class="card receipt" aria-labelledby="rc-h" hidden>
+    <h2 id="rc-h">Payment sent</h2>
+    <dl>
+      <div><dt>Amount</dt><dd id="rc-amount"></dd></div>
+      <div><dt>Recipient</dt><dd id="rc-to"></dd></div>
+      <div><dt>Transaction hash</dt><dd id="rc-hash"></dd></div>
+    </dl>
+  </section>
+</main>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

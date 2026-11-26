@@ -1,0 +1,13 @@
+{
+  "name": "vegga",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Vegga: verify that what a dapp shows is what its users sign, using Kane CLI",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node scripts/server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "verify": "node scripts/vegga.mjs verify"
+  }
+}

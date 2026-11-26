@@ -1,0 +1,772 @@
+{
+  "project": "Vegga",
+  "rounds": [
+    {
+      "label": "round-1-shipped",
+      "url": "http://localhost:4173/fixture/",
+      "driver": "kane",
+      "startedAt": "2026-11-26T02:53:39.635Z",
+      "results": [
+        {
+          "id": "SG-01",
+          "title": "Pay a 25 USDC invoice",
+          "verdict": "unsafe",
+          "findings": [
+            {
+              "id": "UNLIMITED_APPROVAL_HIDDEN",
+              "severity": "high",
+              "message": "Request #1 (approve) asks for an UNLIMITED allowance while the screen shows a finite amount.",
+              "source": "screen"
+            },
+            {
+              "id": "NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "Request #1 would execute on Ethereum Mainnet, but the screen says Sepolia Testnet.",
+              "source": "screen"
+            },
+            {
+              "id": "AGENT_NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "The agent read the network as Sepolia Testnet, but request #1 executes on Ethereum Mainnet.",
+              "source": "kane"
+            },
+            {
+              "id": "UNLIMITED_APPROVAL_HIDDEN",
+              "severity": "high",
+              "message": "Request #2 (approve) asks for an UNLIMITED allowance while the screen shows a finite amount.",
+              "source": "screen"
+            },
+            {
+              "id": "NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "Request #2 would execute on Ethereum Mainnet, but the screen says Sepolia Testnet.",
+              "source": "screen"
+            },
+            {
+              "id": "AGENT_NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "The agent read the network as Sepolia Testnet, but request #2 executes on Ethereum Mainnet.",
+              "source": "kane"
+            },
+            {
+              "id": "RECIPIENT_MISMATCH",
+              "severity": "high",
+              "message": "Request #3 (deposit) sends to 0xa11ce5b0b1234567890abcdef1234567890abcd0, which is not on the screen. The closest address shown is 0xA11ce5B0b1234567890aBcDeF1234567890aBcDe.",
+              "source": "screen"
+            },
+            {
+              "id": "AMOUNT_MISMATCH",
+              "severity": "high",
+              "message": "Request #3 (deposit) moves 25,000,000,000,000 USDC (raw 25000000000000000000), but that amount is not on the screen.",
+              "source": "screen"
+            },
+            {
+              "id": "NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "Request #3 would execute on Ethereum Mainnet, but the screen says Sepolia Testnet.",
+              "source": "screen"
+            },
+            {
+              "id": "HIDDEN_NATIVE_VALUE",
+              "severity": "high",
+              "message": "Request #3 (deposit) also sends 0.05 ETH of native currency, and the screen never mentions it.",
+              "source": "screen"
+            },
+            {
+              "id": "AGENT_RECIPIENT_MISMATCH",
+              "severity": "high",
+              "message": "The agent read the recipient as 0xA11ce5B0b1234567890aBcDeF1234567890aBcDe, but request #3 signs 0xa11ce5b0b1234567890abcdef1234567890abcd0.",
+              "source": "kane"
+            },
+            {
+              "id": "AGENT_AMOUNT_MISMATCH",
+              "severity": "high",
+              "message": "The agent read the amount as 25.00 USDC, but request #3 signs 25,000,000,000,000 USDC.",
+              "source": "kane"
+            },
+            {
+              "id": "AGENT_NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "The agent read the network as Sepolia Testnet, but request #3 executes on Ethereum Mainnet.",
+              "source": "kane"
+            },
+            {
+              "id": "RECIPIENT_MISMATCH",
+              "severity": "high",
+              "message": "Request #4 (deposit) sends to 0xa11ce5b0b1234567890abcdef1234567890abcd0, which is not on the screen. The closest address shown is 0xA11ce5B0b1234567890aBcDeF1234567890aBcDe.",
+              "source": "screen"
+            },
+            {
+              "id": "AMOUNT_MISMATCH",
+              "severity": "high",
+              "message": "Request #4 (deposit) moves 25,000,000,000,000 USDC (raw 25000000000000000000), but that amount is not on the screen.",
+              "source": "screen"
+            },
+            {
+              "id": "NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "Request #4 would execute on Ethereum Mainnet, but the screen says Sepolia Testnet.",
+              "source": "screen"
+            },
+            {
+              "id": "HIDDEN_NATIVE_VALUE",
+              "severity": "high",
+              "message": "Request #4 (deposit) also sends 0.05 ETH of native currency, and the screen never mentions it.",
+              "source": "screen"
+            },
+            {
+              "id": "AGENT_RECIPIENT_MISMATCH",
+              "severity": "high",
+              "message": "The agent read the recipient as 0xA11ce5B0b1234567890aBcDeF1234567890aBcDe, but request #4 signs 0xa11ce5b0b1234567890abcdef1234567890abcd0.",
+              "source": "kane"
+            },
+            {
+              "id": "AGENT_AMOUNT_MISMATCH",
+              "severity": "high",
+              "message": "The agent read the amount as 25.00 USDC, but request #4 signs 25,000,000,000,000 USDC.",
+              "source": "kane"
+            },
+            {
+              "id": "AGENT_NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "The agent read the network as Sepolia Testnet, but request #4 executes on Ethereum Mainnet.",
+              "source": "kane"
+            }
+          ],
+          "rows": [
+            {
+              "label": "Spender (approve)",
+              "shown": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "signed": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "25.00 USDC",
+              "signed": "Unlimited (2^256 − 1)",
+              "status": "bad"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Ethereum Mainnet",
+              "status": "bad"
+            },
+            {
+              "label": "Spender (approve)",
+              "shown": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "signed": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "25.00 USDC",
+              "signed": "Unlimited (2^256 − 1)",
+              "status": "bad"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Ethereum Mainnet",
+              "status": "bad"
+            },
+            {
+              "label": "Recipient (deposit)",
+              "shown": "0xA11ce5B0b1234567890aBcDeF1234567890aBcDe",
+              "signed": "0xa11ce5b0b1234567890abcdef1234567890abcd0",
+              "status": "bad"
+            },
+            {
+              "label": "Amount (deposit)",
+              "shown": "25.00 USDC",
+              "signed": "25,000,000,000,000 USDC (raw 25000000000000000000)",
+              "status": "bad"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Ethereum Mainnet",
+              "status": "bad"
+            },
+            {
+              "label": "Native value",
+              "shown": "not on screen",
+              "signed": "0.05 ETH",
+              "status": "bad"
+            },
+            {
+              "label": "Recipient (deposit)",
+              "shown": "0xA11ce5B0b1234567890aBcDeF1234567890aBcDe",
+              "signed": "0xa11ce5b0b1234567890abcdef1234567890abcd0",
+              "status": "bad"
+            },
+            {
+              "label": "Amount (deposit)",
+              "shown": "25.00 USDC",
+              "signed": "25,000,000,000,000 USDC (raw 25000000000000000000)",
+              "status": "bad"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Ethereum Mainnet",
+              "status": "bad"
+            },
+            {
+              "label": "Native value",
+              "shown": "not on screen",
+              "signed": "0.05 ETH",
+              "status": "bad"
+            }
+          ],
+          "requests": [
+            {
+              "n": 1,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 1,
+              "valueWei": "0",
+              "shot": "round-1-shipped-SG-01-1.png"
+            },
+            {
+              "n": 2,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 1,
+              "valueWei": "0",
+              "shot": "round-1-shipped-SG-01-2.png"
+            },
+            {
+              "n": 3,
+              "method": "eth_sendTransaction",
+              "fn": "deposit",
+              "to": "0xE5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0",
+              "chainId": 1,
+              "valueWei": "50000000000000000",
+              "shot": "round-1-shipped-SG-01-3.png"
+            },
+            {
+              "n": 4,
+              "method": "eth_sendTransaction",
+              "fn": "deposit",
+              "to": "0xE5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0",
+              "chainId": 1,
+              "valueWei": "50000000000000000",
+              "shot": "round-1-shipped-SG-01-4.png"
+            }
+          ],
+          "driver": "kane",
+          "kane": {
+            "status": "passed",
+            "summary": "Connected the wallet and prepared a USDC payment to 0xA11ce5B0b1234567890aBcDeF1234567890aBcDe.\nReviewed the payment summary: 25.00 USDC on Sepolia Testnet, with a 25.00 USDC approval allowance.\nApproved the USDC allowance and sent the payment successfully; the page confirmed “Payment sent.”",
+            "testUrl": "https://test-manager.lambdatest.com/projects/01M8ATGT65KCRQ67B7QA9CA832/test-cases/01M8AW2WMJZ0NKACVRMEKA14YJ/dashboard/share/US_SKXNEHOM96P6UEI0LP3QVQOWI8XCSUBCYKEZES8NL4TVNEO8AGIQ5KQQ9DQJDOF2?type=summary&agentView=true&fqdn=summary-page",
+            "duration": 110.7,
+            "finalState": {
+              "url": "http://localhost:4173/fixture/",
+              "ui_recipient": "0xA11ce5B0b1234567890aBcDeF1234567890aBcDe",
+              "ui_amount": "25.00 USDC",
+              "ui_network": "Sepolia Testnet",
+              "ui_approval_amount": "25.00 USDC",
+              "payment_status": "Payment sent"
+            },
+            "failedStep": null
+          }
+        },
+        {
+          "id": "SG-02",
+          "title": "Pay a 7.50 USDC invoice",
+          "verdict": "unsafe",
+          "findings": [
+            {
+              "id": "UNLIMITED_APPROVAL_HIDDEN",
+              "severity": "high",
+              "message": "Request #1 (approve) asks for an UNLIMITED allowance while the screen shows a finite amount.",
+              "source": "screen"
+            },
+            {
+              "id": "NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "Request #1 would execute on Ethereum Mainnet, but the screen says Sepolia Testnet.",
+              "source": "screen"
+            },
+            {
+              "id": "UNLIMITED_APPROVAL_HIDDEN",
+              "severity": "high",
+              "message": "Request #2 (approve) asks for an UNLIMITED allowance while the screen shows a finite amount.",
+              "source": "screen"
+            },
+            {
+              "id": "NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "Request #2 would execute on Ethereum Mainnet, but the screen says Sepolia Testnet.",
+              "source": "screen"
+            },
+            {
+              "id": "RECIPIENT_MISMATCH",
+              "severity": "high",
+              "message": "Request #3 (deposit) sends to 0x7e57ed0000000000000000000000000000c0ffe0, which is not on the screen. The closest address shown is 0x7e57ed0000000000000000000000000000c0ffee.",
+              "source": "screen"
+            },
+            {
+              "id": "AMOUNT_MISMATCH",
+              "severity": "high",
+              "message": "Request #3 (deposit) moves 7,500,000,000,000 USDC (raw 7500000000000000000), but that amount is not on the screen.",
+              "source": "screen"
+            },
+            {
+              "id": "NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "Request #3 would execute on Ethereum Mainnet, but the screen says Sepolia Testnet.",
+              "source": "screen"
+            },
+            {
+              "id": "HIDDEN_NATIVE_VALUE",
+              "severity": "high",
+              "message": "Request #3 (deposit) also sends 0.05 ETH of native currency, and the screen never mentions it.",
+              "source": "screen"
+            },
+            {
+              "id": "RECIPIENT_MISMATCH",
+              "severity": "high",
+              "message": "Request #4 (deposit) sends to 0x7e57ed0000000000000000000000000000c0ffe0, which is not on the screen. The closest address shown is 0x7e57ed0000000000000000000000000000c0ffee.",
+              "source": "screen"
+            },
+            {
+              "id": "AMOUNT_MISMATCH",
+              "severity": "high",
+              "message": "Request #4 (deposit) moves 7,500,000,000,000 USDC (raw 7500000000000000000), but that amount is not on the screen.",
+              "source": "screen"
+            },
+            {
+              "id": "NETWORK_MISMATCH",
+              "severity": "high",
+              "message": "Request #4 would execute on Ethereum Mainnet, but the screen says Sepolia Testnet.",
+              "source": "screen"
+            },
+            {
+              "id": "HIDDEN_NATIVE_VALUE",
+              "severity": "high",
+              "message": "Request #4 (deposit) also sends 0.05 ETH of native currency, and the screen never mentions it.",
+              "source": "screen"
+            }
+          ],
+          "rows": [
+            {
+              "label": "Spender (approve)",
+              "shown": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "signed": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "7.50 USDC",
+              "signed": "Unlimited (2^256 − 1)",
+              "status": "bad"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Ethereum Mainnet",
+              "status": "bad"
+            },
+            {
+              "label": "Spender (approve)",
+              "shown": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "signed": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "7.50 USDC",
+              "signed": "Unlimited (2^256 − 1)",
+              "status": "bad"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Ethereum Mainnet",
+              "status": "bad"
+            },
+            {
+              "label": "Recipient (deposit)",
+              "shown": "0x7e57ed0000000000000000000000000000c0ffee",
+              "signed": "0x7e57ed0000000000000000000000000000c0ffe0",
+              "status": "bad"
+            },
+            {
+              "label": "Amount (deposit)",
+              "shown": "not on screen",
+              "signed": "7,500,000,000,000 USDC (raw 7500000000000000000)",
+              "status": "bad"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Ethereum Mainnet",
+              "status": "bad"
+            },
+            {
+              "label": "Native value",
+              "shown": "not on screen",
+              "signed": "0.05 ETH",
+              "status": "bad"
+            },
+            {
+              "label": "Recipient (deposit)",
+              "shown": "0x7e57ed0000000000000000000000000000c0ffee",
+              "signed": "0x7e57ed0000000000000000000000000000c0ffe0",
+              "status": "bad"
+            },
+            {
+              "label": "Amount (deposit)",
+              "shown": "not on screen",
+              "signed": "7,500,000,000,000 USDC (raw 7500000000000000000)",
+              "status": "bad"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Ethereum Mainnet",
+              "status": "bad"
+            },
+            {
+              "label": "Native value",
+              "shown": "not on screen",
+              "signed": "0.05 ETH",
+              "status": "bad"
+            }
+          ],
+          "requests": [
+            {
+              "n": 1,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 1,
+              "valueWei": "0",
+              "shot": "round-1-shipped-SG-02-1.png"
+            },
+            {
+              "n": 2,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 1,
+              "valueWei": "0",
+              "shot": "round-1-shipped-SG-02-2.png"
+            },
+            {
+              "n": 3,
+              "method": "eth_sendTransaction",
+              "fn": "deposit",
+              "to": "0xE5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0",
+              "chainId": 1,
+              "valueWei": "50000000000000000",
+              "shot": "round-1-shipped-SG-02-3.png"
+            },
+            {
+              "n": 4,
+              "method": "eth_sendTransaction",
+              "fn": "deposit",
+              "to": "0xE5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0",
+              "chainId": 1,
+              "valueWei": "50000000000000000",
+              "shot": "round-1-shipped-SG-02-4.png"
+            }
+          ],
+          "driver": "kane",
+          "kane": {
+            "status": "passed",
+            "summary": "Connected the wallet and prepared a USDC invoice payment.\nEntered recipient 0x7e57ed0000000000000000000000000000c0ffee and an amount of 7.5 USDC; the payment summary showed 7.50 USDC on Sepolia Testnet.\nApproved a 7.50 USDC allowance, then sent the payment.\nThe page confirmed that the payment was sent.",
+            "testUrl": "https://test-manager.lambdatest.com/projects/01M8ATGT65KCRQ67B7QA9CA832/test-cases/01M8AW77AJG03071BZNPS5WB3N/dashboard/share/US_NWS0QEJRV8R2ITC210F3C4Q0H93ZYDJYSKJGZKTOO8KCM4SE5DLPU28GC686ZJ60?type=summary&agentView=true&fqdn=summary-page",
+            "duration": 116.6,
+            "finalState": {
+              "url": "http://localhost:4173/fixture/",
+              "recipient": "0x7e57ed0000000000000000000000000000c0ffee",
+              "amount": "7.50 USDC",
+              "network": "Sepolia Testnet",
+              "approval_amount": "7.50 USDC",
+              "payment_status": "Payment sent"
+            },
+            "failedStep": null
+          }
+        }
+      ]
+    },
+    {
+      "label": "round-2-fixed",
+      "url": "http://localhost:4173/fixture/",
+      "driver": "kane",
+      "startedAt": "2026-11-26T06:29:20.859Z",
+      "results": [
+        {
+          "id": "SG-01",
+          "title": "Pay a 25 USDC invoice",
+          "verdict": "safe",
+          "findings": [],
+          "rows": [
+            {
+              "label": "Spender (approve)",
+              "shown": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "signed": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Spender (approve)",
+              "shown": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "signed": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Recipient (deposit)",
+              "shown": "0xa11ce5b0b1234567890abcdef1234567890abcde",
+              "signed": "0xa11ce5b0b1234567890abcdef1234567890abcde",
+              "status": "ok"
+            },
+            {
+              "label": "Amount (deposit)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Recipient (deposit)",
+              "shown": "0xa11ce5b0b1234567890abcdef1234567890abcde",
+              "signed": "0xa11ce5b0b1234567890abcdef1234567890abcde",
+              "status": "ok"
+            },
+            {
+              "label": "Amount (deposit)",
+              "shown": "25 USDC",
+              "signed": "25 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            }
+          ],
+          "requests": [
+            {
+              "n": 1,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-2-fixed-SG-01-1.png"
+            },
+            {
+              "n": 2,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-2-fixed-SG-01-2.png"
+            },
+            {
+              "n": 3,
+              "method": "eth_sendTransaction",
+              "fn": "deposit",
+              "to": "0xE5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-2-fixed-SG-01-3.png"
+            },
+            {
+              "n": 4,
+              "method": "eth_sendTransaction",
+              "fn": "deposit",
+              "to": "0xE5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-2-fixed-SG-01-4.png"
+            }
+          ],
+          "driver": "kane",
+          "kane": {
+            "status": "passed",
+            "summary": "You asked to connect a wallet, enter a recipient and a 25 USDC payment, approve the allowance, and send the payment.\nThe wallet was connected on the Sepolia Testnet; no network switch was needed.\nThe recipient was set to 0xA11ce5B0b1234567890aBcDeF1234567890aBcDe and the amount was set to 25 USDC.\nThe payment summary showed an approval allowance of 25.00 USDC.\nThe allowance was approved and the payment was sent successfully.",
+            "testUrl": "https://test-manager.lambdatest.com/projects/01M8ATGT65KCRQ67B7QA9CA832/test-cases/01M8AWDYFJEDKDRFF4PVCCD92N/dashboard/share/US_KF5BJ76OK11Y6H11GUM5YGOK2E7OMH04DNLAIXHFDO447QNDHYP2ZCO68WPYGFKD?type=summary&agentView=true&fqdn=summary-page",
+            "duration": 136,
+            "finalState": {
+              "url": "http://localhost:4173/fixture/",
+              "ui_recipient": "0xA11ce5B0b1234567890aBcDeF1234567890aBcDe",
+              "ui_amount": "25",
+              "ui_network": "Sepolia Testnet",
+              "ui_approval_amount": "25.00 USDC"
+            },
+            "failedStep": null
+          }
+        },
+        {
+          "id": "SG-02",
+          "title": "Pay a 7.50 USDC invoice",
+          "verdict": "safe",
+          "findings": [],
+          "rows": [
+            {
+              "label": "Spender (approve)",
+              "shown": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "signed": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "7.5 USDC",
+              "signed": "7.5 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Spender (approve)",
+              "shown": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "signed": "0xe5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0e5c0",
+              "status": "ok"
+            },
+            {
+              "label": "Allowance (approve)",
+              "shown": "7.5 USDC",
+              "signed": "7.5 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Recipient (deposit)",
+              "shown": "0x7e57ed0000000000000000000000000000c0ffee",
+              "signed": "0x7e57ed0000000000000000000000000000c0ffee",
+              "status": "ok"
+            },
+            {
+              "label": "Amount (deposit)",
+              "shown": "7.5 USDC",
+              "signed": "7.5 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            },
+            {
+              "label": "Recipient (deposit)",
+              "shown": "0x7e57ed0000000000000000000000000000c0ffee",
+              "signed": "0x7e57ed0000000000000000000000000000c0ffee",
+              "status": "ok"
+            },
+            {
+              "label": "Amount (deposit)",
+              "shown": "7.5 USDC",
+              "signed": "7.5 USDC",
+              "status": "ok"
+            },
+            {
+              "label": "Network",
+              "shown": "Sepolia Testnet",
+              "signed": "Sepolia Testnet",
+              "status": "ok"
+            }
+          ],
+          "requests": [
+            {
+              "n": 1,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-2-fixed-SG-02-1.png"
+            },
+            {
+              "n": 2,
+              "method": "eth_sendTransaction",
+              "fn": "approve",
+              "to": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-2-fixed-SG-02-2.png"
+            },
+            {
+              "n": 3,
+              "method": "eth_sendTransaction",
+              "fn": "deposit",
+              "to": "0xE5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-2-fixed-SG-02-3.png"
+            },
+            {
+              "n": 4,
+              "method": "eth_sendTransaction",
+              "fn": "deposit",
+              "to": "0xE5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0",
+              "chainId": 11155111,
+              "valueWei": "0",
+              "shot": "round-2-fixed-SG-02-4.png"
+            }
+          ],
+          "driver": "kane",
+          "kane": {
+            "status": "passed",
+            "summary": "Connected the wallet and switched it to the Sepolia Testnet.\nEntered recipient 0x7e57ed0000000000000000000000000000c0ffee and a payment amount of 7.5 USDC.\nReviewed the payment summary before approval: recipient 0x7e57ed0000000000000000000000000000c0ffee, amount 7.50 USDC, network Sepolia Testnet, and approval allowance 7.50 USDC.\nApproved the 7.50 USDC allowance and sent the payment successfully; the page confirmed that the payment was sent.",
+            "duration": 133.9,
+            "finalState": {
+              "url": "http://localhost:4173/fixture/",
+              "recipient": "0x7e57ed0000000000000000000000000000c0ffee",
+              "payment_amount": "7.50 USDC",
+              "network": "Sepolia Testnet",
+              "approved_allowance": "7.50 USDC"
+            },
+            "failedStep": null
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "scenarios": [
+    {
+      "id": "SG-01",
+      "title": "Pay a 25 USDC invoice",
+      "recipient": "0xA11ce5B0b1234567890aBcDeF1234567890aBcDe",
+      "amount": "25",
+      "objective": "Go to {url}. Click 'Connect wallet'. If a button labelled 'Switch to Sepolia Testnet' is visible, click it. Type {recipient} into 'Recipient address' and {amount} into 'Amount (USDC)'. Before clicking Approve, read the payment summary and store the recipient as 'ui_recipient', the amount as 'ui_amount', the network as 'ui_network' and the allowance you approve as 'ui_approval_amount'. Then click the Approve button and wait until the page says 'Approved'. Then click the Pay button and wait until 'Payment sent' appears. There is no wallet popup: the test wallet confirms by itself. Do not edit any value after you have stored them."
+    },
+    {
+      "id": "SG-02",
+      "title": "Pay a 7.50 USDC invoice",
+      "recipient": "0x7e57ed0000000000000000000000000000c0ffee",
+      "amount": "7.5",
+      "objective": "Go to {url}. Click 'Connect wallet'. If a button labelled 'Switch to Sepolia Testnet' is visible, click it. Type {recipient} into 'Recipient address' and {amount} into 'Amount (USDC)'. Before clicking Approve, read the payment summary and store the recipient as 'ui_recipient', the amount as 'ui_amount', the network as 'ui_network' and the allowance you approve as 'ui_approval_amount'. Then click the Approve button and wait until the page says 'Approved'. Then click the Pay button and wait until 'Payment sent' appears. There is no wallet popup: the test wallet confirms by itself. Do not edit any value after you have stored them."
+    }
+  ]
+}

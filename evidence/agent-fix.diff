@@ -1,0 +1,100 @@
+--- fixture/app.js (before)
++++ fixture/app.js (after)
+@@ -1,17 +1,13 @@
+-// Vegga Escrow: a deliberately flawed invoice-payment dapp, as a coding agent might ship it.
+-// The screen is correct. The TRANSACTIONS it asks the wallet to sign are not. Vegga catches the difference.
+-//
+-// To fix a defect: delete its id from SHIPPED_BUGS and remove the `bugOn('<id>')` branch that uses it.
+-const SHIPPED_BUGS = ['recipient', 'decimals', 'approval', 'network', 'value'];
+-
+-const raw = new URLSearchParams(location.search).get('bugs');
+-const bugs = raw === null ? new Set(SHIPPED_BUGS) : raw === '' || raw === 'none' ? new Set() : new Set(raw.split(',').map((s) => s.trim()));
+-const bugOn = (id) => bugs.has(id);
+-
++// Vegga Escrow: invoice payments. The screen and the transactions now agree.
++// Fixes made from Kane CLI / Vegga round-1 evidence:
++//   UNLIMITED_APPROVAL_HIDDEN  approve exactly the amount shown, not an unlimited allowance
++//   NETWORK_MISMATCH           read the wallet's chain, warn, block, and re-check right before signing
++//   RECIPIENT_MISMATCH         encode the recipient exactly as shown
++//   AMOUNT_MISMATCH            USDC has 6 decimals, not 18
++//   HIDDEN_NATIVE_VALUE        no ETH value is attached to the payment
+ const USDC = '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238'; // Circle USDC on Sepolia
+ const ESCROW = '0xE5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0E5c0';
+ const SEPOLIA = 11155111;
+-const MAX_UINT = (1n << 256n) - 1n;
+ const $ = (id) => document.getElementById(id);
+ const w64 = (x) => (typeof x === 'bigint' ? x.toString(16) : String(x).replace(/^0x/, '').toLowerCase()).padStart(64, '0');
+ const isAddr = (s) => /^0x[0-9a-fA-F]{40}$/.test(s);
+@@ -38,12 +34,10 @@
+ function render() {
+   const connected = !!ui.account;
+   const wrong = connected && ui.chainId !== SEPOLIA;
+-  // BUG 'network': the header just prints the dapp's own network name and never reads the wallet's chain.
+-  $('network-chip').textContent = !connected ? 'Not connected' : bugOn('network') ? 'Sepolia Testnet' : wrong ? 'Ethereum Mainnet' : 'Sepolia Testnet';
++  $('network-chip').textContent = !connected ? 'Not connected' : wrong ? 'Ethereum Mainnet' : 'Sepolia Testnet';
+   $('connect-btn').textContent = connected ? `${ui.account.slice(0, 6)}…${ui.account.slice(-4)}` : 'Connect wallet';
+   $('connect-btn').disabled = connected || ui.busy;
+-  // FIXED: warn about the wrong network and block payment. BUG 'network': never checked.
+-  $('network-banner').hidden = !(wrong && !bugOn('network'));
++  $('network-banner').hidden = !wrong;
+   $('recipient').disabled = !connected; $('amount').disabled = !connected;
+ 
+   const f = form();
+@@ -54,7 +48,7 @@
+   $('approve-label').textContent = f.units ? `Approve ${show(f.units)} USDC` : 'Approve';
+   $('pay-label').textContent = f.units ? `Pay ${show(f.units)} USDC` : 'Pay';
+ 
+-  const ready = connected && f.ok && !ui.busy && (bugOn('network') || !wrong);
++  const ready = connected && f.ok && !ui.busy && !wrong;
+   $('approve-btn').disabled = !(ready && !ui.approved);
+   $('pay-btn').disabled = !(ready && ui.approved);
+   $('status').textContent = ui.status; $('status').className = `status ${ui.kind}`.trim();
+@@ -77,6 +71,11 @@
+   }
+   throw new Error('Transaction was not confirmed.');
+ }
++// Re-read the wallet's chain right before every signing request, so the screen cannot drift from reality.
++async function requireSepolia() {
++  ui.chainId = parseInt(await eth.request({ method: 'eth_chainId' }), 16);
++  if (ui.chainId !== SEPOLIA) throw new Error('Wrong network. Switch your wallet to Sepolia Testnet.');
++}
+ 
+ $('connect-btn').addEventListener('click', () => guarded(async () => {
+   if (!eth) throw new Error('No wallet found. Install a wallet and reload.');
+@@ -93,31 +92,22 @@
+ 
+ $('approve-btn').addEventListener('click', () => guarded(async () => {
+   const f = form();
+-  // FIXED: approve exactly the amount shown. BUG 'approval': approves an unlimited allowance.
+-  const allowance = bugOn('approval') ? MAX_UINT : f.units;
+-  say('Approving…');  render();
+-  const hash = await eth.request({ method: 'eth_sendTransaction', params: [{ from: ui.account, to: USDC, data: '0x095ea7b3' + w64(ESCROW) + w64(allowance) }] });
++  await requireSepolia();
++  say('Approving…'); render();
++  const hash = await eth.request({ method: 'eth_sendTransaction', params: [{ from: ui.account, to: USDC, data: '0x095ea7b3' + w64(ESCROW) + w64(f.units) }] });
+   await waitReceipt(hash);
+   ui.approved = true; say(`Approved ${show(f.units)} USDC for the escrow contract.`);
+ }));
+ 
+ $('pay-btn').addEventListener('click', () => guarded(async () => {
+   const f = form();
+-  // FIXED: encode the recipient and amount exactly as shown.
+-  // BUG 'recipient': last character of the address is changed (address-poisoning lookalike).
+-  const recipient = bugOn('recipient') ? f.recipient.slice(0, -1) + (f.recipient.endsWith('0') ? '1' : '0') : f.recipient;
+-  // BUG 'decimals': USDC has 6 decimals, this encodes 18.
+-  const amount = bugOn('decimals') ? toUnits($('amount').value, 18) : f.units;
+-  // BUG 'value': attaches 0.05 ETH that the screen never mentions.
+-  const tx = { from: ui.account, to: ESCROW, data: '0x8340f549' + w64(USDC) + w64(recipient) + w64(amount) };
+-  if (bugOn('value')) tx.value = '0xb1a2bc2ec50000';
++  await requireSepolia();
+   say('Paying…'); render();
+-  const hash = await eth.request({ method: 'eth_sendTransaction', params: [tx] });
++  const hash = await eth.request({ method: 'eth_sendTransaction', params: [{ from: ui.account, to: ESCROW, data: '0x8340f549' + w64(USDC) + w64(f.recipient) + w64(f.units) }] });
+   await waitReceipt(hash);
+   ui.receipt = { amount: `${show(f.units)} USDC`, to: f.recipient, hash };
+   say('');
+ }));
+ 
+ ['recipient', 'amount'].forEach((id) => $(id).addEventListener('input', () => { ui.approved = false; ui.receipt = null; say(''); render(); }));
+-window.vegga = { bugs: [...bugs] };
+ render();

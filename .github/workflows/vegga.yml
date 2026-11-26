@@ -1,0 +1,17 @@
+name: vegga-verify
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm test                       # unit tests; the browser test runs because Chrome is preinstalled
+      - run: npm install -g @testmuai/kane-cli
+      - run: kane-cli login --username "${{ secrets.LT_USERNAME }}" --access-key "${{ secrets.LT_ACCESS_KEY }}"
+      - run: node scripts/server.mjs &
+      - run: sleep 2 && node scripts/vegga.mjs verify --label ci-${{ github.sha }} --headless
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: vegga-evidence, path: evidence/ }

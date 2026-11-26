@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vegga · what you see vs what you sign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root{--fog:#edf0f5;--paper:#fff;--ink:#101a33;--ink-2:#4a5573;--line:#d5dbe8;--cobalt:#2750f0;--teal:#0b7a6b;--teal-bg:#dcf3ee;--rose:#c23b55;--rose-bg:#fde8ec;--amber:#8a5a00;--amber-bg:#fff1d3;--grey-bg:#e8ebf2;
+    --font:'Bricolage Grotesque',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fog);color:var(--ink);font-family:var(--font);line-height:1.5;font-variant-numeric:tabular-nums}
+  header,main{max-width:1120px;margin:0 auto;padding-left:clamp(16px,4vw,40px);padding-right:clamp(16px,4vw,40px)}
+  header{padding-top:clamp(20px,4vw,44px)}
+  h1{margin:0;font-size:clamp(1.8rem,4vw,2.7rem);letter-spacing:-.03em;font-weight:800}
+  header p{margin:6px 0 0;color:var(--ink-2);max-width:68ch}
+  main{padding-top:20px;padding-bottom:80px;display:grid;gap:28px}
+  .arc{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+  .stat{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 18px;min-width:200px}
+  .stat b{display:block;font-size:2rem;letter-spacing:-.03em}.stat span{color:var(--ink-2);font-size:.9rem}
+  .stat.bad{border-color:var(--rose)}.stat.good{border-color:var(--teal)}
+  .arrow{align-self:center;color:var(--ink-2);font-size:1.6rem}
+  .round>h2{margin:0 0 10px;font-size:1.05rem;color:var(--ink-2);font-weight:600}
+  .flow{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,3vw,26px);margin-bottom:14px}
+  .head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .head h3{margin:0;font-size:1.2rem}
+  .pill{display:inline-block;border-radius:999px;padding:3px 12px;font-weight:600;font-size:.85rem}
+  .safe{background:var(--teal-bg);color:var(--teal)}.unsafe{background:var(--rose-bg);color:var(--rose)}.inconclusive{background:var(--amber-bg);color:var(--amber)}
+  .cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px}
+  @media(max-width:860px){.cols{grid-template-columns:1fr}}
+  table{border-collapse:collapse;width:100%;font-size:.9rem}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--ink-2);font-weight:600;background:#f7f8fb}
+  td.m{font-family:var(--mono);font-size:.78rem;overflow-wrap:anywhere}
+  .st{font-weight:800}.st.ok{color:var(--teal)}.st.bad{color:var(--rose)}.st.warn{color:var(--amber)}
+  .shots{display:flex;gap:10px;flex-wrap:wrap}
+  .shots figure{margin:0;flex:1 1 150px;max-width:240px}
+  .shots img{width:100%;border:1px solid var(--line);border-radius:10px;display:block}
+  .shots figcaption{font-size:.78rem;color:var(--ink-2);margin-top:4px}
+  ul.f{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+  ul.f li{display:flex;gap:10px;align-items:flex-start;font-size:.92rem}
+  .sev{flex:none;border-radius:6px;padding:1px 8px;font-size:.72rem;font-weight:800;text-transform:uppercase}
+  .sev.high{background:var(--rose-bg);color:var(--rose)}.sev.warn{background:var(--amber-bg);color:var(--amber)}.sev.inconclusive{background:var(--grey-bg);color:var(--ink-2)}
+  .sub{color:var(--ink-2);font-size:.85rem}a{color:var(--cobalt)}
+  .empty{background:var(--paper);border:1px dashed var(--line);border-radius:18px;padding:32px;max-width:64ch}
+  code{background:var(--grey-bg);padding:2px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<header>
+  <h1>What you see vs. what you sign</h1>
+  <p>Vegga lets Kane CLI drive a dapp's real UI while a test wallet records exactly what the dapp asks to sign, then compares the two. Each round: Kane tests, an agent fixes, Kane tests again.</p>
+</header>
+<main id="root"><p class="sub">Loading evidence…</p></main>
+<script>
+(async () => {
+  const root = document.getElementById('root');
+  const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; };
+  let report; try { report = await (await fetch('../evidence/report.json', { cache: 'no-store' })).json(); } catch {}
+  root.textContent = '';
+  if (!report || !report.rounds || !report.rounds.length) {
+    const b = el('div', 'empty'); b.append(el('b', '', 'No verification rounds yet.'));
+    const p = el('p'); p.append('Run ', el('code', '', 'node scripts/vegga.mjs verify --label round-1-shipped'), ' and reload.'); b.append(p); root.append(b); return;
+  }
+  const rounds = report.rounds;
+  const high = (r) => r.results.reduce((n, x) => n + x.findings.filter((f) => f.severity === 'high').length, 0);
+  const safe = (r) => r.results.filter((x) => x.verdict === 'safe').length;
+
+  const arc = el('div', 'arc');
+  rounds.forEach((r, i) => {
+    if (i) arc.append(el('div', 'arrow', '→'));
+    const s = el('div', 'stat ' + (safe(r) === r.results.length ? 'good' : 'bad'));
+    s.append(el('b', '', `${safe(r)}/${r.results.length} safe`), el('span', '', `${r.label} · ${high(r)} high-severity findings`));
+    arc.append(s);
+  });
+  root.append(arc);
+
+  [...rounds].reverse().forEach((r) => {
+    const sec = el('section', 'round');
+    sec.append(el('h2', '', `${r.label} · ${new Date(r.startedAt).toLocaleString()} · ${r.driver === 'kane' ? 'driven by Kane CLI' : 'scripted smoke driver'}`));
+    r.results.forEach((x) => {
+      const card = el('div', 'flow'); const head = el('div', 'head');
+      head.append(el('h3', '', `${x.id} · ${x.title}`), el('span', 'pill ' + x.verdict, x.verdict));
+      card.append(head);
+      const cols = el('div', 'cols');
+
+      const left = el('div');
+      if (x.rows.length) {
+        const t = el('table'); const h = el('tr');
+        ['Check', 'Screen showed', 'Wallet was asked to sign', ''].forEach((c) => h.append(el('th', '', c))); t.append(h);
+        x.rows.forEach((row) => {
+          const tr = el('tr'); tr.append(el('td', '', row.label), el('td', 'm', row.shown), el('td', 'm', row.signed),
+            el('td', 'st ' + row.status, row.status === 'ok' ? '✔' : row.status === 'bad' ? '✘' : '!'));
+          t.append(tr);
+        });
+        left.append(t);
+      } else left.append(el('p', 'sub', 'No signing requests were captured.'));
+      cols.append(left);
+
+      const right = el('div'); const shots = el('div', 'shots');
+      (x.requests || []).filter((q) => q.shot).forEach((q) => {
+        const fig = el('figure'); const img = el('img'); img.src = `../evidence/shots/${q.shot}`; img.alt = `Screen at signing request ${q.n}`; img.loading = 'lazy';
+        fig.append(img, el('figcaption', '', `Screen when the wallet was asked to sign: #${q.n} ${q.fn}`)); shots.append(fig);
+      });
+      right.append(shots);
+      if (x.kane && x.kane.testUrl && /^https:\/\//.test(x.kane.testUrl)) { const a = el('a', 'sub', 'Open Kane run'); a.href = x.kane.testUrl; a.target = '_blank'; a.rel = 'noopener'; right.append(a); }
+      cols.append(right); card.append(cols);
+
+      const list = el('ul', 'f');
+      x.findings.forEach((f) => { const li = el('li'); li.append(el('span', 'sev ' + f.severity, f.severity === 'inconclusive' ? 'unclear' : f.severity), el('span', '', `${f.id}: ${f.message}`)); list.append(li); });
+      if (x.findings.length) card.append(list);
+      sec.append(card);
+    });
+    root.append(sec);
+  });
+})();
+</script>
+</body>
+</html>
